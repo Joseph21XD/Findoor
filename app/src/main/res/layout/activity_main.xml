@@ -30,7 +30,8 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="11dp"
             android:clickable="true"
-            android:text="Registrarse"
+            android:onClick="registrar"
+            android:text="@string/registrar"
             android:textSize="18sp" />
 
         <LinearLayout
@@ -44,13 +45,13 @@
                 android:id="@+id/textView2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Usuario:"
+                android:text="@string/usuario"
                 android:textColor="@color/colorBase"
                 android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/editText2"
-                android:layout_width="250dp"
+                android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPersonName" />
@@ -59,28 +60,27 @@
                 android:id="@+id/textView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Contraseña:"
+                android:text="@string/contrasena"
                 android:textColor="@color/colorBase"
                 android:textSize="24sp" />
 
             <EditText
                 android:id="@+id/editText"
-                android:layout_width="250dp"
+                android:layout_width="225dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:inputType="textPassword" />
 
             <Button
                 android:id="@+id/button"
-                android:layout_width="300dp"
+                android:layout_width="275dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="30dp"
                 android:alpha="0.75"
                 android:background="@drawable/boton_redondo"
-                android:fontFamily="@font/abeezee"
-                android:text="Ingresar"
+                android:text="@string/ingresar"
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
