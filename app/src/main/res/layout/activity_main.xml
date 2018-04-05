@@ -84,5 +84,16 @@
                 android:textColor="@android:color/white" />
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@+id/textView3"
+            android:layout_marginEnd="119dp"
+            android:onClick="information"
+            android:text="@string/informacion"
+            android:textSize="18sp" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

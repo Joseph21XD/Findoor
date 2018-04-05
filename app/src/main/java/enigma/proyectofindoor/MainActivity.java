@@ -8,11 +8,11 @@ import android.view.View;
 public class MainActivity extends AppCompatActivity {
 
     public void registrar(View view){
-        Intent intent= new Intent(MainActivity.this,InformacionActivity.class);
+        Intent intent= new Intent(MainActivity.this,Registrar.class);
         startActivity(intent);
     }
 
-    public void Hola(View view){
+    public void information(View view){
         Intent intent= new Intent(MainActivity.this,InformacionActivity.class);
         startActivity(intent);
     }
