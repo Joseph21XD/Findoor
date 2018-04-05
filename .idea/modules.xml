@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Findoor.iml" filepath="$PROJECT_DIR$/Findoor.iml" />
+      <module fileurl="file://C:\Users\ramir\AndroidStudioProjects\ProyectoFindoor\Findoor.iml" filepath="C:\Users\ramir\AndroidStudioProjects\ProyectoFindoor\Findoor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ProyectoFindoor.iml" filepath="$PROJECT_DIR$/ProyectoFindoor.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
