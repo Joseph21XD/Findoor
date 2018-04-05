@@ -11,6 +11,11 @@ public class MainActivity extends AppCompatActivity {
         Intent intent= new Intent(MainActivity.this,InformacionActivity.class);
         startActivity(intent);
     }
+	
+	public void registrar2(View view){
+        Intent intent= new Intent(MainActivity.this,InformacionActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
