@@ -12,6 +12,11 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void Hola(View view){
+        Intent intent= new Intent(MainActivity.this,InformacionActivity.class);
+        startActivity(intent);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
