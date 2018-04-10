@@ -5,11 +5,13 @@ package Datos;
  */
 
 import com.microsoft.azure.storage.CloudStorageAccount;
+import com.microsoft.azure.storage.blob.BlobOutputStream;
 import com.microsoft.azure.storage.blob.CloudBlobClient;
 import com.microsoft.azure.storage.blob.CloudBlobContainer;
 import com.microsoft.azure.storage.blob.CloudBlockBlob;
 import com.microsoft.azure.storage.blob.ListBlobItem;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.SecureRandom;
@@ -57,6 +59,22 @@ public class ImageManagerJ {
 
     }
 
+    public static String UploadImage2(byte[] image, String name) throws Exception {
+        CloudBlobContainer container = getContainer();
+
+        container.createIfNotExists();
+
+        CloudBlockBlob imageBlob = container.getBlockBlobReference(name);
+
+        BlobOutputStream blobOutputStream = imageBlob.openOutputStream();
+        for(int i=0; i<image.length; i++) {
+            blobOutputStream.write(image[i]);
+        }
+        blobOutputStream.close();
+        return name;
+
+    }
+
     public static String[] ListImages() throws Exception{
         CloudBlobContainer container = getContainer();
 
@@ -86,5 +104,7 @@ public class ImageManagerJ {
 
     static final String validChars = "abcdefghijklmnopqrstuvwxyz";
     static SecureRandom rnd = new SecureRandom();
+
+
 
 }

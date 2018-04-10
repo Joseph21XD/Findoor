@@ -1,124 +1,96 @@
 package enigma.proyectofindoor;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
-
-import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.SecureRandom;
 import java.util.concurrent.ExecutionException;
 
 import Datos.DataParserJ;
 import Datos.ImageManagerJ;
+import Datos.ImageTask;
 import Datos.JsonTask;
-import Datos.Persona;
 
-public class Registrar extends AppCompatActivity {
+public class Configuracion extends AppCompatActivity {
+    public int mapa= 1;
+    EditText edt1, edt2, edt3;
+    RadioButton radioButton2;
+    RadioButton radioButton1;
     SharedPreferences sharedPreferences;
-    EditText editText1, editText2, editText3, editText4;
-    public static Persona persona;
+    ImageView imageView;
+    String valor="";
     final String validChars = "abcdefghijklmnopqrstuvwxyz";
     SecureRandom rnd = new SecureRandom();
-    String valor="";
+    public void pushRadioButton(View view){
+        RadioButton radioButton= (RadioButton)view;
+        if(radioButton.getTag().equals("1")){
+            radioButton1.setChecked(true);
+            radioButton2.setChecked(false);
+            mapa= 1;
+        }
+        else{
+            radioButton1.setChecked(false);
+            radioButton2.setChecked(true);
+            mapa= 2;
+        }
 
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_configuracion);
+        imageView= findViewById(R.id.imageView3);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
-        setContentView(R.layout.activity_registrar);
-        editText1 = findViewById(R.id.editText);
-        editText2 = findViewById(R.id.editText2);
-        editText3 = findViewById(R.id.editText3);
-        editText4 = findViewById(R.id.editText4);
-        persona = new Persona();
-        valor= randomString(10);
-    }
-
-    public void ingresar(View view) throws ExecutionException, InterruptedException {
-        String correo = editText3.getText().toString();
-        if (correo.contains("@") && correo.contains(".com") && (correo.contains("hotmail") || correo.contains("gmail")) && correo.length() > 10) {
-            String nombre = editText1.getText().toString();
-            String apellido = editText2.getText().toString();
-            String contrasenna = editText4.getText().toString();
-            if (contrasenna.length() >= 8) {
-                if (nombre.length() > 0 && apellido.length() > 0) {
-                    nombre = DataParserJ.parsear(nombre);
-                    apellido = DataParserJ.parsear(apellido);
-                    correo = DataParserJ.parsear(correo);
-                    contrasenna = DataParserJ.parsear(contrasenna);
-                    persona.setApellido(apellido);
-                    persona.setNombre(nombre);
-                    persona.setCorreo(correo);
-                    persona.setContrasenna(contrasenna);
-                    if (persona.getUrlImagen().length() == 0) {
-                        persona.setUrlImagen("https://findoor.blob.core.windows.net/imagenes/logo.png");
-                        Log.d("ENTRA", "IF");}
-                    String url = "https://findoor.herokuapp.com/persona/add/"+persona.getNombre()+"/"+persona.getApellido()+"/"
-                            +persona.getIsFacebook()+"/"+persona.getCorreo()+"/"+persona.getContrasenna()+"/"+DataParserJ.parsear(persona.getUrlImagen())+"/";
-                    JsonTask downloadTask = new JsonTask();
-                    final String resultado=downloadTask.execute(url).get();
-                    if(resultado.length()==0){
-                        Toast.makeText(getApplicationContext(), "Correo no permitido, cambie de correo", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        new AlertDialog.Builder(this).setIcon(R.drawable.logo_lleno)
-                                .setTitle("Ya estás logueado")
-                                .setMessage("Quiere empezar la experiencia Findoor?")
-                                .setPositiveButton("Aceptar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        sharedPreferences.edit().putString("token",resultado).apply();
-                                        finish();
-                                    }
-                                })
-                                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        finish();
-                                    }
-                                }).show();
-
-                    }
-
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error! Dato no ingresado", Toast.LENGTH_SHORT).show();
-                    editText1.setText("");
-                    editText2.setText("");
-                }
-
-            } else {
-                Toast.makeText(getApplicationContext(), "la contraseña debe tener más de 8 caracteres", Toast.LENGTH_SHORT).show();
-                editText4.setText("");
-            }
-        } else {
-            Toast.makeText(getApplicationContext(), "correo incorrecto", Toast.LENGTH_SHORT).show();
-            editText3.setText("");
+        edt1= findViewById(R.id.editText);
+        edt2= findViewById(R.id.editText2);
+        edt3= findViewById(R.id.editText4);
+        edt1.setText(MainActivity.persona.getNombre());
+        edt2.setText(MainActivity.persona.getApellido());
+        edt3.setText(MainActivity.persona.getContrasenna());
+        radioButton1= findViewById(R.id.radioButton);
+        radioButton2= findViewById(R.id.radioButton2);
+        String mapatoken= sharedPreferences.getString("mapa", "");
+        if(!mapatoken.equals("") && !mapatoken.equals("1")){
+            radioButton1.setChecked(false);
+            radioButton2.setChecked(true);
+            mapa= 2;
         }
+        ImageTask imageTask= new ImageTask();
+        Bitmap bmp= null;
+        try {
+            bmp = imageTask.execute(MainActivity.persona.getUrlImagen()).get();
+            imageView.setImageBitmap(bmp);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public void abrirGaleria(View v) {
+        valor=MainActivity.persona.getUrlImagen().substring(47);
+        if(valor.equals("logo.png"))
+            valor= randomString(10);
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
@@ -151,8 +123,8 @@ public class Registrar extends AppCompatActivity {
                                 Bitmap bmp= BitmapFactory.decodeStream(imageStream2);
                                 ImageView imageView= findViewById(R.id.imageView3);
                                 imageView.setImageBitmap(bmp);
-                                persona.setImagen(imageStream);
-                                persona.setUrlImagen("https://findoor.blob.core.windows.net/imagenes/"+valor);
+                                MainActivity.persona.setImagen(imageStream);
+                                MainActivity.persona.setUrlImagen("https://findoor.blob.core.windows.net/imagenes/"+valor);
                             } catch (FileNotFoundException e) {
                                 e.printStackTrace();
                             } catch (IOException e) {
@@ -215,4 +187,34 @@ public class Registrar extends AppCompatActivity {
         return sb.toString();
     }
 
+    public void ingresar(View view){
+        sharedPreferences.edit().putString("mapa",mapa+"").apply();
+        if(edt1.length()>0 && edt2.length()>0 && edt3.length()>0){
+            MainActivity.persona.setNombre(edt1.getText().toString());
+            MainActivity.persona.setApellido(edt2.getText().toString());
+            MainActivity.persona.setContrasenna(edt3.getText().toString());
+            String token= sharedPreferences.getString("token", "");
+            String url = "https://findoor.herokuapp.com/persona/update/"+MainActivity.persona.getId()+"/"+DataParserJ.parsear(MainActivity.persona.getNombre())
+                    +"/"+DataParserJ.parsear(MainActivity.persona.getApellido())+"/" +MainActivity.persona.getIsFacebook()+
+                    "/"+DataParserJ.parsear(MainActivity.persona.getCorreo())+"/"
+                    +DataParserJ.parsear(MainActivity.persona.getContrasenna())+"/"+
+                    DataParserJ.parsear(MainActivity.persona.getUrlImagen())+"/KEY="+token+"/";
+            JsonTask downloadTask = new JsonTask();
+            try {
+                final String resultado=downloadTask.execute(url).get();
+                if(!resultado.equals("")){
+                    sharedPreferences.edit().putString("token",resultado).apply();
+                    finish();}
+                else{
+                    Toast.makeText(getApplicationContext(),"Error a la hora de guardar los datos", Toast.LENGTH_SHORT);
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+    }
 }

@@ -29,40 +29,58 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     EditText editText1;
     EditText editText2;
-    String nombre="";
+
+    public void registrar(View v){
+        Intent intent= new Intent(MainActivity.this, Registrar.class);
+        startActivity(intent);
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         editText1= findViewById(R.id.editText2);
         editText2= findViewById(R.id.editText);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
+        /*sharedPreferences.edit().putString("auth_token","2qwHJDSFIOIDwad").apply();*/
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         String token= sharedPreferences.getString("token", "");
         if(token.length()>0){
             // https://findoor.herokuapp.com/persona/token/token
             String url = "https://findoor.herokuapp.com/persona/token/"+token+"/";
             JsonTask downloadTask = new JsonTask();
-            String resultado= "";
+            String resultado= null;
             try {
                 resultado = downloadTask.execute(url).get();
             } catch (InterruptedException e) {
-                e.printStackTrace();
+                resultado="";
             } catch (ExecutionException e) {
-                e.printStackTrace();
+                resultado="";
             }
             try {
                 JSONObject obj = new JSONObject(resultado);
-                String temp= obj.getString("nombre");
-                Log.d("TOKEN", temp);
-                Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_SHORT).show();
-                nombre= temp;
+                int id= Integer.parseInt(obj.getString("id"));
+                String nom= DataParserJ.deparsear(obj.getString("nombre"));
+                String ap= DataParserJ.deparsear(obj.getString("apellido"));
+                String img= DataParserJ.deparsear(obj.getString("imagen"));
+                String user= DataParserJ.deparsear(obj.getString("correo"));
+                String pwd= DataParserJ.deparsear(obj.getString("contrasenna"));
+                int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
+                String tok= obj.getString("token");
+                persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
+                Log.d("PERSONA", persona.toString());
+                sharedPreferences.edit().putString("token",tok).apply();
+                Intent intent = new Intent(MainActivity.this, Configuracion.class);
+                startActivity(intent);
             } catch (Exception e) {
-                nombre = "";
+                e.printStackTrace();
             }
 
         }
-        /*sharedPreferences.edit().putString("auth_token","2qwHJDSFIOIDwad").apply();*/
     }
 
     public void ingresar(View view) throws ExecutionException, InterruptedException {
@@ -74,12 +92,19 @@ public class MainActivity extends AppCompatActivity {
         String resultado=downloadTask.execute(url).get();
         try {
             JSONObject obj = new JSONObject(resultado);
-            String temp= DataParserJ.deparsear(obj.getString("nombre"));
-            Log.d("TOKEN", temp);
-            nombre= temp;
-            Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_SHORT).show();
+            int id= Integer.parseInt(obj.getString("id"));
+            String nom= DataParserJ.deparsear(obj.getString("nombre"));
+            String ap= DataParserJ.deparsear(obj.getString("apellido"));
+            String img= DataParserJ.deparsear(obj.getString("imagen"));
+            int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
+            String tok= obj.getString("token");
+            persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
+            Log.d("PERSONA", persona.toString());
+            sharedPreferences.edit().putString("token",tok).apply();
+            Intent intent = new Intent(MainActivity.this, Configuracion.class);
+            startActivity(intent);
         } catch (Exception e) {
-            nombre = "";
+            Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
         }
     }
 }

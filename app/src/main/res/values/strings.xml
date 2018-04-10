@@ -10,6 +10,16 @@
     <string name="comentar">Comentar</string>
     <string name="visitar">Visitar</string>
     <string name="informacion">Información</string>
-
+    <string name="latitud">Latitud</string>
+    <string name="longuitud">Longuitud</string>
+    <string name="direccion">Dirección</string>
+    <string name="descripcion">Descripción</string>
+    <string name="urlImage">Url de imagen</string>
+    <string name="recomendar">Recomendar</string>
+    <string name="cargar">Cargar</string>
+    <string name="coordenadas">Coordenadas</string>
+    <string name="latlon">Latitud/Longuitud</string>
+    <string name="title_activity_maps_recomendar">Recomendar</string>
+    <string name="guardar">guardar</string>
 
 </resources>
