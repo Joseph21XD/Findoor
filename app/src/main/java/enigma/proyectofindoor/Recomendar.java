@@ -46,6 +46,7 @@ public class Recomendar extends AppCompatActivity {
             textView1.setText(lat.substring(0,lat.indexOf(".")+6));
             textView2.setText(lon.substring(0,lon.indexOf(".")+6));
             MapsRecomendarActivity.coordenadas= null;
+            editText4.setText(MapsRecomendarActivity.dir);
         }
     }
 

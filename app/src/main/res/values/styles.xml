@@ -11,6 +11,11 @@
         <item name="colorControlNormal">@color/colorBase</item>
         <item name="colorControlActivated">@color/colorAuxiliar</item>
     </style>
+    <style name="myTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/colorBase</item>
+        <item name="colorPrimaryDark">@color/colorBase</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
 
 
 </resources>

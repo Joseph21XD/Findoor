@@ -33,7 +33,8 @@
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
 
-        <activity android:name=".InformacionActivity" />
+        <activity android:name=".InformacionActivity"
+            android:theme="@style/myTheme"/>
         <activity android:name=".Recomendar" />
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -50,7 +51,9 @@
         <activity
             android:name=".MapsRecomendarActivity"
             android:label="@string/title_activity_maps_recomendar" />
-        <activity android:name=".Configuracion"></activity>
+        <activity android:name=".Configuracion" />
+        <activity android:name=".PerfilPersonal"
+            android:theme="@style/myTheme"></activity>
     </application>
 
 </manifest>

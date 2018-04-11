@@ -6,6 +6,8 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Address;
+import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -24,11 +26,17 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class MapsRecomendarActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
 
 
     private Marker site;
     public static LatLng coordenadas;
+    public static String dir="";
     private GoogleMap mMap;
     SharedPreferences sharedPreferences;
 
@@ -92,12 +100,30 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
         coordenadas= latLng;
         mMap.clear();
         // create marker
-        MarkerOptions marker = new MarkerOptions().position(latLng).title("Sitio a recomendar");
-        marker.icon(BitmapDescriptorFactory.fromResource(R.drawable.point));
+        Geocoder geocoder;
+        List<Address> addresses= new ArrayList<>();
+        geocoder = new Geocoder(this, Locale.getDefault());
+        try {
+            addresses = geocoder.getFromLocation(latLng.latitude, latLng.longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+        dir=address;
+        String mapa_code= sharedPreferences.getString("mapa","");
+        int icon=0;
+        if(mapa_code.equals("") || mapa_code.equals("1"))
+            icon=R.drawable.point;
+        else
+            icon=R.drawable.point2;
+        MarkerOptions marker = new MarkerOptions().position(latLng).title(address);
+        marker.icon(BitmapDescriptorFactory.fromResource(icon));
         site = mMap.addMarker(marker);
         site.setTag(0);
         Log.d("LAT", coordenadas.latitude+"");
         Log.d("LON", coordenadas.longitude+"");
+
 
     }
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffffff"
     tools:context="enigma.proyectofindoor.InformacionActivity">
 
     <RelativeLayout
@@ -25,7 +26,8 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp">
+                android:layout_height="150dp"
+                android:background="@color/colorBase">
 
                 <ImageView
                     android:id="@+id/imageView5"
@@ -36,20 +38,31 @@
                     app:srcCompat="@drawable/logo" />
             </RelativeLayout>
 
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/textView19"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_margin="15dp"
-                    android:text="Lorem ipsum dolor sit amet, sapien etiam, nunc amet dolor ac odio mauris justo. Luctus arcu, urna praesent at id quisque ac. Arcu es massa vestibulum malesuada, integer vivamus elit eu mauris eus, cum eros quis aliquam wisi. Nulla wisi laoreet suspendisse integer vivamus elit eu mauris hendrerit facilisi, mi mattis pariatur aliquam pharetra eget." />
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="17dp"
+                    android:text="TextView"
+                    android:textColor="@color/colorBase" />
 
-            </RelativeLayout>
+                <TextView
+                    android:id="@+id/textView20"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="17dp"
+                    android:text="TextView"
+                    android:textColor="@color/colorAuxiliar" />
+            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
