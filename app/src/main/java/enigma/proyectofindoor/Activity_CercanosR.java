@@ -140,12 +140,29 @@ public class Activity_CercanosR extends AppCompatActivity {
             }
         };
 
-        /*if(Build.VERSION.SDK_INT < 23){
-            //Tomar ubicacion
-            Log.d("ENTRA A", "IF");
-            if(ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-                locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if(Build.VERSION.SDK_INT < 23){
+            int permissionCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
+            Log.d("PERMISO",permissionCheck+"");
+            if(permissionCheck==PackageManager.PERMISSION_DENIED){
+                if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                    Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                    Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
+                    if(location != null){
+                        String temp = obtainJsonCercanos(location);
+                        listaCercanos = formatJsonName(temp);
+                        listaICercanos = formatJsonImage(temp);
+                        tokenKey = formatJsonNewKey(temp);
+                    }
+                }else{
+                    Log.d("PERMISO","NO");
+                    ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+                }
+            }
+            else{
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
                 if(location != null){
                     String temp = obtainJsonCercanos(location);
                     listaCercanos = formatJsonName(temp);
@@ -153,13 +170,14 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                 }
             }
-        }else{*/
+        }else{
             Log.d("ENTRA A", "ELSE");
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
             }else{
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
                 if(location != null){
                     String temp = obtainJsonCercanos(location);
                     listaCercanos = formatJsonName(temp);
@@ -167,7 +185,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                 }
             }
-        //}
+        }
 
         mTextMessage = (TextView) findViewById(R.id.message);
 
