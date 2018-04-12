@@ -76,7 +76,8 @@ public class MainActivity extends AppCompatActivity {
                 persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
                 Log.d("PERSONA", persona.toString());
                 sharedPreferences.edit().putString("token",tok).apply();
-                Intent intent = new Intent(MainActivity.this, PerfilPersonal.class);
+                Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
+                intent.putExtra("token", tok);
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -103,7 +104,8 @@ public class MainActivity extends AppCompatActivity {
             persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
             Log.d("PERSONA", persona.toString());
             sharedPreferences.edit().putString("token",tok).apply();
-            Intent intent = new Intent(MainActivity.this, PerfilPersonal.class);
+            Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
+            intent.putExtra("token", tok);
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();

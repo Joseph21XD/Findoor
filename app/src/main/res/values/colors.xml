@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorBase">#ac1900</color>
     <color name="colorAuxiliar">#e1e65100</color>
+    <color name="colorSelected">#e1e65100</color>
 </resources>
