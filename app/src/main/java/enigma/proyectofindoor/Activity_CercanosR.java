@@ -141,43 +141,49 @@ public class Activity_CercanosR extends AppCompatActivity {
         };
 
         if(Build.VERSION.SDK_INT < 23){
+            Log.d("ENTRA","IF ");
             int permissionCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
             Log.d("PERMISO",permissionCheck+"");
             if(permissionCheck==PackageManager.PERMISSION_DENIED){
+                Log.d("ENTRA","IF IF");
                 if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
+                    Log.d("ENTRA","IF IF IF");
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                    Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
                     if(location != null){
+                        Log.d("SITito", location.getLatitude()+" "+location.getLongitude());
                         String temp = obtainJsonCercanos(location);
                         listaCercanos = formatJsonName(temp);
                         listaICercanos = formatJsonImage(temp);
                         tokenKey = formatJsonNewKey(temp);
                     }
                 }else{
-                    Log.d("PERMISO","NO");
+                    Log.d("ENTRA","IF IF ELSE");
                     ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
                 }
             }
             else{
+                Log.d("ENTRA","IF ELSE JA");
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
                 if(location != null){
+                    Log.d("ENTRA","ELSE IF");
+                    Log.d("GPS", location.getLatitude()+"");
                     String temp = obtainJsonCercanos(location);
                     listaCercanos = formatJsonName(temp);
                     listaICercanos = formatJsonImage(temp);
                     tokenKey = formatJsonNewKey(temp);
                 }
+                else{
+                    Log.d("ENTRA","ELSE");
+                }
             }
         }else{
-            Log.d("ENTRA A", "ELSE");
             if(ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
                 ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
             }else{
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                Log.d("SITE", location.getLatitude()+" "+location.getLongitude());
                 if(location != null){
                     String temp = obtainJsonCercanos(location);
                     listaCercanos = formatJsonName(temp);

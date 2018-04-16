@@ -20,6 +20,7 @@ import java.util.concurrent.ExecutionException;
 import Datos.DataParserJ;
 import Datos.ImageTask;
 import Datos.JsonTask;
+import Datos.Persona;
 import Datos.Sitio;
 
 public class PerfilPersonal extends AppCompatActivity {
@@ -94,6 +95,73 @@ public class PerfilPersonal extends AppCompatActivity {
             String tok= obj.getString("token");
             sharedPreferences.edit().putString("token",tok).apply();
             Intent intent = new Intent(PerfilPersonal.this, InformacionActivity.class);
+            intent.putExtra("valor", 0);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+    }
+
+    public void agregado2(View view) throws ExecutionException, InterruptedException {
+        String token= sharedPreferences.getString("token","");
+        String url="https://findoor.herokuapp.com/persona.json/KEY="+token+"/";
+        JsonTask jsonTask= new JsonTask();
+        String resultado= jsonTask.execute(url).get();
+        Log.d("resultado",resultado);
+        try {
+            JSONObject obj = new JSONObject(resultado);
+            JSONArray array = obj.getJSONArray("personas");
+            for(int i = 0 ; i < array.length() ; i++){
+                array.getJSONObject(i).getString("nombre");
+                int id=Integer.parseInt(array.getJSONObject(i).getString("id"));
+                String nom= DataParserJ.deparsear(array.getJSONObject(i).getString("nombre"));
+                String ap=DataParserJ.deparsear(array.getJSONObject(i).getString("apellido"));
+                String img=DataParserJ.deparsear(array.getJSONObject(i).getString("imagen"));
+                MainActivity.personas.add(new Persona(id,nom,ap,img));
+            }
+            Log.d("PERSONA", MainActivity.personas.get(0).toString());
+            String tok= obj.getString("token");
+            sharedPreferences.edit().putString("token",tok).apply();
+            Intent intent = new Intent(PerfilPersonal.this, PerfilUsuario.class);
+            intent.putExtra("valor", 0);
+            startActivity(intent);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
+        }
+
+
+
+
+    }
+
+    public void agregado3(View view) throws ExecutionException, InterruptedException {
+        String token= sharedPreferences.getString("token","");
+        String url="https://findoor.herokuapp.com/sitio.json/KEY="+token+"/";
+        JsonTask jsonTask= new JsonTask();
+        String resultado= jsonTask.execute(url).get();
+        Log.d("resultado",resultado);
+        try {
+            JSONObject obj = new JSONObject(resultado);
+            JSONArray array = obj.getJSONArray("sitios");
+            for(int i = 0 ; i < array.length() ; i++){
+                array.getJSONObject(i).getString("nombre");
+                int id=Integer.parseInt(array.getJSONObject(i).getString("id"));
+                String nom= DataParserJ.deparsear(array.getJSONObject(i).getString("nombre"));
+                String lat=DataParserJ.deparsear(array.getJSONObject(i).getString("latitud"));
+                String lon=DataParserJ.deparsear(array.getJSONObject(i).getString("longuitud"));
+                String dir=DataParserJ.deparsear(array.getJSONObject(i).getString("direccion"));
+                String desc=DataParserJ.deparsear(array.getJSONObject(i).getString("descripcion"));
+                String img=DataParserJ.deparsear(array.getJSONObject(i).getString("imagen"));
+                MainActivity.sitios.add(new Sitio(id,nom,lat,lon,dir,desc,img));
+            }
+            Log.d("SITIO", MainActivity.sitios.get(0).toString());
+            String tok= obj.getString("token");
+            sharedPreferences.edit().putString("token",tok).apply();
+            Intent intent = new Intent(PerfilPersonal.this, MapsSitiosActivity.class);
             intent.putExtra("valor", 0);
             startActivity(intent);
         } catch (Exception e) {

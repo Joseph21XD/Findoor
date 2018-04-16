@@ -28,6 +28,7 @@ import Datos.*;
 public class MainActivity extends AppCompatActivity {
     public static Persona persona= new Persona();
     public static ArrayList<Sitio> sitios= new ArrayList<>();
+    public static ArrayList<Persona> personas= new ArrayList<>();
     SharedPreferences sharedPreferences;
     EditText editText1;
     EditText editText2;

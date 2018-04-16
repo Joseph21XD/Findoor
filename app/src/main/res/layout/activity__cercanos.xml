@@ -8,6 +8,18 @@ android:layout_height="match_parent"
 android:background="#ffffff"
 tools:context=".Activity_CercanosR">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView16"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.1"
+            app:srcCompat="@drawable/logo" />
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/listaCercanos"
         android:layout_width="match_parent"

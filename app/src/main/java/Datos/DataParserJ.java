@@ -214,7 +214,6 @@ public class DataParserJ {
                     default : resultado+=k;
                         break;
                 }}}
-        System.out.println(resultado);
         return resultado;
     }
 
