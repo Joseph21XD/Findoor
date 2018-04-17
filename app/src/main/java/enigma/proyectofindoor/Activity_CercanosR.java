@@ -99,6 +99,9 @@ public class Activity_CercanosR extends AppCompatActivity {
                     return true;
                 case R.id.user:
                     mTextMessage.setText(R.string.bottom_menu_user);
+                    Intent intent = new Intent(Activity_CercanosR.this, Activity_ComentariosR.class);
+                    intent.putExtra("token", tokenKey);
+                    startActivity(intent);
                     return true;
             }
             return false;
