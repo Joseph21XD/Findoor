@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayInputStream;
@@ -27,12 +28,25 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.security.SecureRandom;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import Datos.DataParserJ;
 import Datos.ImageManagerJ;
 import Datos.JsonTask;
 import Datos.Persona;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class Registrar extends AppCompatActivity {
     SharedPreferences sharedPreferences;
@@ -41,6 +55,8 @@ public class Registrar extends AppCompatActivity {
     final String validChars = "abcdefghijklmnopqrstuvwxyz";
     SecureRandom rnd = new SecureRandom();
     String valor="";
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
 
 
     @Override
@@ -167,6 +183,8 @@ public class Registrar extends AppCompatActivity {
                 }
                 break;
         }
+        callbackManager.onActivityResult(requestCode,resultCode,imageReturnedIntent);
+
     }
 
     public class DownloadTask extends AsyncTask<byte[], Void, String> {

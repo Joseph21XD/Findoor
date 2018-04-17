@@ -8,6 +8,18 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView17"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.1"
+            app:srcCompat="@drawable/logo" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:layout_editor_absoluteX="127dp"
         tools:layout_editor_absoluteY="242dp">
@@ -33,6 +45,14 @@
             android:onClick="registrar"
             android:text="@string/registrar"
             android:textSize="18sp" />
+
+        <com.facebook.login.widget.LoginButton
+            android:id="@+id/login_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/textView3"
+            android:layout_alignStart="@+id/linearLayout2"
+            android:layout_gravity="center_horizontal" />
 
         <LinearLayout
             android:layout_width="wrap_content"

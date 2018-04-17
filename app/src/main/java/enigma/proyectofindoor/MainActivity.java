@@ -1,5 +1,7 @@
 package enigma.proyectofindoor;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -11,7 +13,18 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -21,19 +34,33 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 
 import Datos.*;
 
+import static com.facebook.FacebookSdk.getApplicationContext;
+
 public class MainActivity extends AppCompatActivity {
     public static Persona persona= new Persona();
     public static ArrayList<Sitio> sitios= new ArrayList<>();
+    public static ArrayList<Persona> personas= new ArrayList<>();
+    public static boolean isfacebook=false;
+    public static String email= "";
     SharedPreferences sharedPreferences;
     EditText editText1;
     EditText editText2;
+    AccessToken accessToken;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
 
     public void registrar(View v){
         Intent intent= new Intent(MainActivity.this, Registrar.class);
+        startActivity(intent);
+    }
+
+    public void refresh(){
+        Intent intent= new Intent(this,MainActivity.class);
         startActivity(intent);
     }
 
@@ -45,6 +72,45 @@ public class MainActivity extends AppCompatActivity {
         editText2= findViewById(R.id.editText);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         /*sharedPreferences.edit().putString("auth_token","2qwHJDSFIOIDwad").apply();*/
+        if(AccessToken.getCurrentAccessToken()!=null){
+            accessToken= AccessToken.getCurrentAccessToken();
+            Profile profile= Profile.getCurrentProfile();
+            Log.d("ID", profile.getId());
+            Log.d("NAME", profile.getFirstName());
+            Log.d("LAST NAME ", profile.getLastName());
+            Log.d("MIDDLE NAME ", profile.getMiddleName());
+            Log.d("URL", profile.getLinkUri().toString());
+            Log.d("URL2", profile.getProfilePictureUri(100,100).toString());
+            isfacebook=true;
+            try {
+                logFacebook(profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getProfilePictureUri(100,100).toString());
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else{}
+            callbackManager= CallbackManager.Factory.create();
+            loginButton=(LoginButton) findViewById(R.id.login_button);
+            loginButton.setReadPermissions(Arrays.asList(
+                    "public_profile", "email", "user_birthday", "user_friends"));
+            loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    refresh();
+                }
+
+                @Override
+                public void onCancel() {
+                    Toast.makeText(getApplicationContext(),"Ingreso Cancelado",Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(FacebookException error) {
+                    Toast.makeText(getApplicationContext(),"Error de Ingreso",Toast.LENGTH_SHORT).show();
+                }
+            });
+
     }
 
     @Override
@@ -110,6 +176,51 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode,resultCode,data);
+
+    }
+
+    public void logFacebook(String id, String nombre, String apellido, String imagen) throws ExecutionException, InterruptedException{
+        persona.setApellido(apellido);
+        persona.setNombre(nombre);
+        persona.setCorreo(id);
+        persona.setUrlImagen(imagen);
+        persona.setIsFacebook(1);
+        nombre = DataParserJ.parsear(nombre);
+        apellido = DataParserJ.parsear(apellido);
+        String url = "https://findoor.herokuapp.com/persona/facebook/"+nombre+"/"+apellido+"/"
+                +1+"/"+id+"/facebook/"+DataParserJ.parsear(persona.getUrlImagen())+"/";
+        JsonTask downloadTask = new JsonTask();
+        final String resultado=downloadTask.execute(url).get();
+        if(resultado.length()==0){
+            Toast.makeText(getApplicationContext(), "Error a la hora de ingresar", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            try {
+                JSONObject obj = new JSONObject(resultado);
+                int idetify= Integer.parseInt(obj.getString("id"));
+                String nom= DataParserJ.deparsear(obj.getString("nombre"));
+                String ap= DataParserJ.deparsear(obj.getString("apellido"));
+                String img= DataParserJ.deparsear(obj.getString("imagen"));
+                String correo= obj.getString("correo");
+                int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
+                String tok= obj.getString("token");
+                persona= new Persona(idetify, nom,ap,correo,"facebook",img,tok,isf);
+                Log.d("PERSONA", persona.toString());
+                sharedPreferences.edit().putString("token",tok).apply();
+                Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
+                intent.putExtra("token", tok);
+                startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
+            }
+
+        }
+
     }
 
 

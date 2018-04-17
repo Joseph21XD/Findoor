@@ -104,6 +104,36 @@ public class DataParserJ {
                 case "$": resultado+="Z";
                     estado=true;
                     break;
+                case "á": resultado+="_A";
+                    estado=true;
+                    break;
+                case "é": resultado+="_E";
+                    estado=true;
+                    break;
+                case "í": resultado+="_I";
+                    estado=true;
+                    break;
+                case "ó": resultado+="_O";
+                    estado=true;
+                    break;
+                case "ú": resultado+="_U";
+                    estado=true;
+                    break;
+                case "Á": resultado+="_B";
+                    estado=true;
+                    break;
+                case "É": resultado+="_C";
+                    estado=true;
+                    break;
+                case "Í": resultado+="_D";
+                    estado=true;
+                    break;
+                case "Ó": resultado+="_F";
+                    estado=true;
+                    break;
+                case "Ú": resultado+="_G";
+                    estado=true;
+                    break;
                 default : resultado+="";
                     break;
             }
@@ -126,6 +156,31 @@ public class DataParserJ {
             String k= s.charAt(i)+"";
             if(!estado){
                 estado=true;
+                if(k.toUpperCase().equals(k)){
+                    switch (k){
+                        case "A": resultado+="á";
+                            break;
+                        case "E": resultado+="é";
+                            break;
+                        case "I": resultado+="í";
+                            break;
+                        case "O": resultado+="ó";
+                            break;
+                        case "U": resultado+="ú";
+                            break;
+                        case "B": resultado+="Á";
+                            break;
+                        case "C": resultado+="É";
+                            break;
+                        case "D": resultado+="Í";
+                            break;
+                        case "F": resultado+="Ó";
+                            break;
+                        case "G": resultado+="Ú";
+                            break;
+                    }
+                }
+                else
                 resultado+=k.toUpperCase();
             }
             else{
@@ -214,7 +269,6 @@ public class DataParserJ {
                     default : resultado+=k;
                         break;
                 }}}
-        System.out.println(resultado);
         return resultado;
     }
 

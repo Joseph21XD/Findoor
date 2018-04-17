@@ -29,6 +29,13 @@ public class Persona {
         isFacebook= isf;
     }
 
+    public Persona(int i,String n, String ap, String url){
+        id= i;
+        nombre= n;
+        apellido= ap;
+        urlImagen= url;
+    }
+
     public Persona(){
         nombre="";
     }

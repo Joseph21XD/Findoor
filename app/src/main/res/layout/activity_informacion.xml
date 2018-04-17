@@ -26,15 +26,15 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="175dp"
                 android:background="@color/colorBase">
 
                 <ImageView
                     android:id="@+id/imageView5"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
+                    android:layout_height="150dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
                     app:srcCompat="@drawable/logo" />
             </RelativeLayout>
 
@@ -51,7 +51,8 @@
                     android:layout_marginRight="15dp"
                     android:layout_marginTop="17dp"
                     android:text="TextView"
-                    android:textColor="@color/colorBase" />
+                    android:textColor="@color/colorBase"
+                    android:textSize="18sp" />
 
                 <TextView
                     android:id="@+id/textView20"
@@ -82,32 +83,45 @@
                         android:layout_margin="10dp"
                         android:layout_toStartOf="@+id/ratingBar"
                         android:layout_weight="1"
+                        android:clickable="true"
+                        android:onClick="pushTortuga"
                         app:srcCompat="@drawable/logo_vacio" />
 
-                    <TextView
-                        android:id="@+id/textView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/imageView6"
-                        android:layout_alignParentEnd="true"
+                    <ImageView
+                        android:id="@+id/imageView7"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
                         android:layout_margin="10dp"
+                        android:layout_toStartOf="@+id/ratingBar"
                         android:layout_weight="1"
-                        android:text="@string/visitar"
-                        android:textColor="@color/colorAuxiliar"
-                        android:textSize="18sp" />
+                        android:clickable="true"
+                        android:onClick="pushHouse"
+                        app:srcCompat="@drawable/visitar" />
 
-                    <TextView
-                        android:id="@+id/textView7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBaseline="@+id/textView6"
-                        android:layout_alignBottom="@+id/textView6"
+                    <ImageView
+                        android:id="@+id/imageView8"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
                         android:layout_margin="10dp"
-                        android:layout_toStartOf="@+id/textView6"
+                        android:layout_toStartOf="@+id/ratingBar"
                         android:layout_weight="1"
-                        android:text="@string/comentar"
-                        android:textColor="@color/colorAuxiliar"
-                        android:textSize="18sp" />
+                        android:clickable="true"
+                        app:srcCompat="@drawable/comment" />
+
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="10dp"
+                        android:layout_toStartOf="@+id/ratingBar"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:onClick="mapear"
+                        app:srcCompat="@drawable/marker" />
+
                 </LinearLayout>
 
                 <RatingBar

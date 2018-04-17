@@ -30,5 +30,8 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_activity__favoritos_r">Activity_FavoritosR</string>
+    <string name="title_activity_maps_sitios">Map</string>
+    <string name="facebook_app_id">191397594816414</string>
+    <string name="fb_login_protocol_scheme">fb191397594816414</string>
 
 </resources>

@@ -1,27 +1,28 @@
 package enigma.proyectofindoor;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -31,10 +32,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsRecomendarActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener {
+import Datos.CustomInfoWindowAdapter;
+
+public class MapsSitiosActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
 
-    private Marker site;
+    private ArrayList<Marker> site= new ArrayList<>();
     public static LatLng coordenadas;
     public static String dir="";
     private GoogleMap mMap;
@@ -43,7 +46,7 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_maps_recomendar);
+        setContentView(R.layout.activity_maps_sitios);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -59,9 +62,9 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
             // in a raw resource file.
             boolean success= false;
             if(mapa_code.equals("") || mapa_code.equals("1")){
-            success = map.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            this, R.raw.retro));}
+                success = map.setMapStyle(
+                        MapStyleOptions.loadRawResourceStyle(
+                                this, R.raw.retro));}
             else{
                 success = map.setMapStyle(
                         MapStyleOptions.loadRawResourceStyle(
@@ -76,27 +79,47 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
         }
 
         mMap = map;
-
-
+        String code= sharedPreferences.getString("mapa","");
+        int icon=0;
+        if(code.equals("") || code.equals("1"))
+            icon=R.drawable.point;
+        else
+            icon=R.drawable.point2;
+        for(int i=0; i<MainActivity.sitios.size(); i++) {
+            LatLng latLng= new LatLng(Double.parseDouble(MainActivity.sitios.get(i).getLatitud()),Double.parseDouble(MainActivity.sitios.get(i).getLongitud()));
+            MarkerOptions marker = new MarkerOptions().position(latLng).title(MainActivity.sitios.get(i).getNombre());
+            marker.icon(BitmapDescriptorFactory.fromResource(icon));
+            Marker mark= mMap.addMarker(marker);
+            mark.setTag(i+"");
+            site.add(mark);
+        }
         // Set a listener for marker click.
         mMap.setOnMarkerClickListener(this);
         mMap.setOnMapClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter(LayoutInflater.from(getApplicationContext())));
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             Toast.makeText(getApplicationContext(),"GPS desactivado", Toast.LENGTH_SHORT);
         }
         else{
             mMap.setMyLocationEnabled(true);
         }
+        LatLng latLng = new LatLng(10, -84);
+        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 7);
+        mMap.animateCamera(cameraUpdate);
     }
 
     /** Called when the user clicks a marker. */
     public boolean onMarkerClick(final Marker marker) {
+        int i= Integer.parseInt(marker.getTag()+"");
+        Log.d("PRESIONÓ", MainActivity.sitios.get(i).getNombre());
 
         return false;
     }
 
     @Override
     public void onMapClick(LatLng latLng) {
+        /*
         coordenadas= latLng;
         mMap.clear();
         // create marker
@@ -127,12 +150,17 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
         site = mMap.addMarker(marker);
         site.setTag(0);
         Log.d("LAT", coordenadas.latitude+"");
-        Log.d("LON", coordenadas.longitude+"");
+        Log.d("LON", coordenadas.longitude+"");*/
 
 
     }
 
-    public void aceptarCoor(View view){
-        finish();
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        int i= Integer.parseInt(marker.getTag()+"");
+        Log.d("PRESIONÓ INFO", MainActivity.sitios.get(i).getNombre());
+        Intent intent= new Intent(MapsSitiosActivity.this, InformacionActivity.class);
+        intent.putExtra("valor", i);
+        startActivity(intent);
     }
 }
