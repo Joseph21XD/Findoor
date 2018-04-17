@@ -110,6 +110,18 @@
                         android:clickable="true"
                         app:srcCompat="@drawable/comment" />
 
+                    <ImageView
+                        android:id="@+id/imageView9"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_margin="10dp"
+                        android:layout_toStartOf="@+id/ratingBar"
+                        android:layout_weight="1"
+                        android:clickable="true"
+                        android:onClick="mapear"
+                        app:srcCompat="@drawable/marker" />
+
                 </LinearLayout>
 
                 <RatingBar

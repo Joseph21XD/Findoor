@@ -83,11 +83,17 @@ public class Configuracion extends AppCompatActivity {
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
+        if(MainActivity.persona.getIsFacebook()==1){
+            edt1.setEnabled(false);
+            edt2.setEnabled(false);
+            edt3.setEnabled(false);
+        }
 
 
     }
 
     public void abrirGaleria(View v) {
+        if(MainActivity.persona.getIsFacebook()==0){
         valor=MainActivity.persona.getUrlImagen().substring(47);
         if(valor.equals("logo.png"))
             valor= randomString(10);
@@ -96,7 +102,7 @@ public class Configuracion extends AppCompatActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(
                 Intent.createChooser(intent, "Seleccione una imagen"),
-                1);
+                1);}
     }
 
     protected void onActivityResult(int requestCode, int resultCode,
@@ -189,6 +195,7 @@ public class Configuracion extends AppCompatActivity {
 
     public void ingresar(View view){
         sharedPreferences.edit().putString("mapa",mapa+"").apply();
+        if(MainActivity.persona.getIsFacebook()==0){
         if(edt1.length()>0 && edt2.length()>0 && edt3.length()>0){
             MainActivity.persona.setNombre(edt1.getText().toString());
             MainActivity.persona.setApellido(edt2.getText().toString());
@@ -214,7 +221,9 @@ public class Configuracion extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        }
+        }}
+        else
+            finish();
 
     }
 }

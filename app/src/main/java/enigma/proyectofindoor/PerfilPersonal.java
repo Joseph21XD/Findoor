@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -68,6 +70,7 @@ public class PerfilPersonal extends AppCompatActivity {
     public void logout(View v)
     {
         sharedPreferences.edit().putString("token","").apply();
+        LoginManager.getInstance().logOut();
         finish();
     }
 

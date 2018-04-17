@@ -99,6 +99,8 @@ public class Activity_CercanosR extends AppCompatActivity {
                     return true;
                 case R.id.user:
                     mTextMessage.setText(R.string.bottom_menu_user);
+                    Intent intent = new Intent(Activity_CercanosR.this,PerfilPersonal.class);
+                    startActivity(intent);
                     return true;
             }
             return false;
