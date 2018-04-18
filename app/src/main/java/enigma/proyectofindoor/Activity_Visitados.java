@@ -23,11 +23,10 @@ import Datos.JsonTask;
 import Datos.Persona;
 import Datos.Sitio;
 
-public class Activity_Seguidos extends AppCompatActivity {
+public class Activity_Visitados extends AppCompatActivity {
 
-
-    ArrayList<String> listaSeguidos = new ArrayList<String>();
-    ArrayList<String> listaISeguidos = new ArrayList<String>();
+    ArrayList<String> listaVisitados = new ArrayList<String>();
+    ArrayList<String> listaIVisitados = new ArrayList<String>();
     SharedPreferences sharedPreferences;
     ListView listView;
     String tokenKey = "";
@@ -36,27 +35,26 @@ public class Activity_Seguidos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity__seguidos);
-
-        sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
+        setContentView(R.layout.activity__visitados);
+        sharedPreferences = this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = sharedPreferences.getString("token", "");
         /*
         tokenKey = intent.getStringExtra("token");
         Log.d("TOKEN", tokenKey+"");*/
-        listView = findViewById(R.id.listaSeguidos);
+        listView = findViewById(R.id.listaVisitados);
 
-        String resultado = obtainJsonSeguidos();
-        listaSeguidos = formatJsonName(resultado);
-        listaISeguidos = formatJsonImage(resultado);
+        String resultado = obtainJsonVisitados();
+        listaVisitados = formatJsonName(resultado);
+        listaIVisitados = formatJsonImage(resultado);
         tokenKey = formatJsonNewKey(resultado);
 
-        customListView = new CustomListView(this, listaSeguidos, listaISeguidos);
+        customListView = new CustomListView(this, listaVisitados, listaIVisitados);
         listView.setAdapter(customListView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(getApplicationContext(), PerfilUsuario.class);
+                Intent intent = new Intent(getApplicationContext(), InformacionActivity.class);
                 intent.putExtra("valor", position);
                 startActivity(intent);
             }
@@ -64,15 +62,15 @@ public class Activity_Seguidos extends AppCompatActivity {
         });
     }
 
-    public String obtainJsonSeguidos(){
+    public String obtainJsonVisitados() {
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.d("ENTRA A", "ObtainJsonSeguidos");
+        Log.d("ENTRA A", "ObtainJsonVisitados");
         try {
-            result = jsonTask.execute("http://findoor.herokuapp.com/persona/seguidos/KEY="+tokenKey+"/").get();
+            result = jsonTask.execute("http://findoor.herokuapp.com/sitio/TYPE=VISITED/"+ MainActivity.persona.getId() +"/KEY=" + tokenKey + "/").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
-            Toast.makeText(this,e.toString(),Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, e.toString(), Toast.LENGTH_SHORT).show();
         } catch (ExecutionException e) {
             e.printStackTrace();
         }
@@ -80,14 +78,14 @@ public class Activity_Seguidos extends AppCompatActivity {
         return result;
     }
 
-    public String formatJsonNewKey(String resul){
+    public String formatJsonNewKey(String resul) {
         Log.d("ENTRA A", "formatJsonNewKey");
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
             String key = jsonObject.getString("token");
-            sharedPreferences.edit().putString("token",key).apply();
+            sharedPreferences.edit().putString("token", key).apply();
             Log.i("jsonObject KEY FINAL", key);
             return key;
 
@@ -98,20 +96,22 @@ public class Activity_Seguidos extends AppCompatActivity {
         return "";
     }
 
-    public ArrayList<String> formatJsonName(String resul){
+    public ArrayList<String> formatJsonName(String resul) {
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
-            JSONArray jsonArray = new JSONArray(jsonObject.getString("personas"));
+            JSONArray jsonArray = new JSONArray(jsonObject.getString("sitios"));
             ArrayList<String> temp = new ArrayList<String>();
 
-            MainActivity.personas.clear();
-            for(int i = 0; i < jsonArray.length(); i++){
-                JSONObject jsonPersona = new JSONObject(jsonArray.getString(i));
-                temp.add(DataParserJ.deparsear(jsonPersona.getString("nombre"))+ " " +DataParserJ.deparsear(jsonPersona.getString("apellido")));
-                MainActivity.personas.add(new Persona(Integer.parseInt(DataParserJ.deparsear(jsonPersona.getString("id"))),DataParserJ.deparsear(jsonPersona.getString("nombre")),
-                        DataParserJ.deparsear(jsonPersona.getString("apellido")),DataParserJ.deparsear(jsonPersona.getString("imagen"))));
+            MainActivity.sitios.clear();
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
+                temp.add(DataParserJ.deparsear(jsonSitio.getString("nombre")));
+                MainActivity.sitios.add(new Sitio(Integer.parseInt(DataParserJ.deparsear(jsonSitio.getString("id"))),DataParserJ.deparsear(jsonSitio.getString("nombre")),
+                        DataParserJ.deparsear(jsonSitio.getString("latitud")),DataParserJ.deparsear(jsonSitio.getString("longuitud")),
+                        DataParserJ.deparsear(jsonSitio.getString("direccion")),DataParserJ.deparsear(jsonSitio.getString("descripcion")),
+                        DataParserJ.deparsear(jsonSitio.getString("imagen"))));
             }
 
             return temp;
@@ -124,17 +124,17 @@ public class Activity_Seguidos extends AppCompatActivity {
     }
 
 
-    public ArrayList<String> formatJsonImage(String resul){
+    public ArrayList<String> formatJsonImage(String resul) {
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
-            JSONArray jsonArray = new JSONArray(jsonObject.getString("personas"));
+            JSONArray jsonArray = new JSONArray(jsonObject.getString("sitios"));
             ArrayList<String> temp = new ArrayList<String>();
 
-            for(int i = 0; i < jsonArray.length(); i++){
-                JSONObject jsonPersona = new JSONObject(jsonArray.getString(i));
-                temp.add(DataParserJ.deparsear(jsonPersona.getString("imagen")));
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
+                temp.add(DataParserJ.deparsear(jsonSitio.getString("imagen")));
             }
             Log.i("jsonObject AQUI IMAGEN", temp.toString());
             return temp;

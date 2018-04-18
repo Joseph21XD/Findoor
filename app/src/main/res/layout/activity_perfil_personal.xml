@@ -45,7 +45,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="17dp"
                     android:clickable="true"
-                    android:onClick="agregado"
+                    android:onClick="seguidosClicked"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -74,7 +74,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="17dp"
                     android:clickable="true"
-                    android:onClick="agregado2"
+                    android:onClick="seguidoresClicked"
                     android:orientation="horizontal">
 
                     <ImageView
@@ -102,7 +102,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="17dp"
                     android:clickable="true"
-                    android:onClick="agregado3"
+                    android:onClick="visitadosClicked"
                     android:orientation="horizontal">
 
                     <ImageView

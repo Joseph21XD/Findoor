@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity_Seguidos">
+    tools:context=".Activity_Visitados_Otros">
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,7 +20,7 @@
     </RelativeLayout>
 
     <ListView
-        android:id="@+id/listaSeguidos"
+        android:id="@+id/listaVisitadosOtros"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

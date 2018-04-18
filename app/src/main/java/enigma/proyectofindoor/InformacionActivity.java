@@ -39,8 +39,6 @@ public class InformacionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_informacion);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
 
-        Log.e("VALUE POSITION", MainActivity.sitios.get(0).getNombre() +" "+ MainActivity.sitios.get(1).getNombre());
-
         ratingBar= findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
@@ -77,7 +75,6 @@ public class InformacionActivity extends AppCompatActivity {
         imageView= findViewById(R.id.imageView5);
         if(valor!=-1){
             value=valor;
-            Log.e("POSITION VALUE ", String.valueOf(value));
             textView1.setText(MainActivity.sitios.get(valor).getNombre());
             textView2.setText(MainActivity.sitios.get(valor).getDireccion()+"\n"+MainActivity.sitios.get(valor).getDescripcion());
             ImageTask imageTask= new ImageTask();
