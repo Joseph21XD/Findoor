@@ -22,6 +22,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ import Datos.CustomListView;
 import Datos.DataParserJ;
 import Datos.ImageTask;
 import Datos.JsonTask;
+import Datos.Sitio;
 
 public class Activity_CercanosR extends AppCompatActivity {
 
@@ -87,6 +89,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
+                    Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
                     return true;
                 case R.id.star:
                     mTextMessage.setText(R.string.bottom_menu_star);
@@ -96,6 +99,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
+                    Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
                     return true;
                 case R.id.user:
                     mTextMessage.setText(R.string.bottom_menu_user);
@@ -204,6 +208,22 @@ public class Activity_CercanosR extends AppCompatActivity {
 
         customListView = new CustomListView(this, listaCercanos, listaICercanos);
         listView.setAdapter(customListView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), InformacionActivity.class);
+                intent.putExtra("valor", position);
+                startActivity(intent);
+            }
+
+        });
+    }
+
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        tokenKey = sharedPreferences.getString("token", "");
     }
 
 
@@ -291,12 +311,17 @@ public class Activity_CercanosR extends AppCompatActivity {
             JSONArray jsonArray = new JSONArray(jsonObject.getString("sitios"));
             ArrayList<String> temp = new ArrayList<String>();
 
+            MainActivity.sitios.clear();
             for(int i = 0; i < jsonArray.length(); i++){
                 JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("nombre")));
+                MainActivity.sitios.add(new Sitio(Integer.parseInt(DataParserJ.deparsear(jsonSitio.getString("id"))),DataParserJ.deparsear(jsonSitio.getString("nombre")),
+                        DataParserJ.deparsear(jsonSitio.getString("latitud")),DataParserJ.deparsear(jsonSitio.getString("longuitud")),
+                        DataParserJ.deparsear(jsonSitio.getString("direccion")),DataParserJ.deparsear(jsonSitio.getString("descripcion")),
+                        DataParserJ.deparsear(jsonSitio.getString("imagen"))));
             }
 
-            Log.i("jsonObject AQUI NOMBRE", temp.toString());
+            Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
             return temp;
 
         } catch (JSONException e) {
@@ -305,6 +330,7 @@ public class Activity_CercanosR extends AppCompatActivity {
 
         return new ArrayList<String>();
     }
+
 
     public ArrayList<String> formatJsonImage(String resul){
         try {

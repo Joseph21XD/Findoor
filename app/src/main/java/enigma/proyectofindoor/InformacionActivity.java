@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.concurrent.ExecutionException;
 
@@ -30,11 +31,23 @@ public class InformacionActivity extends AppCompatActivity {
     int visitado=0;
     int value=0;
 
+    public void pushComentar(View view){
+        Intent intent = new Intent(InformacionActivity.this, Activity_ComentariosR.class);
+        intent.putExtra("IDlugar", value);
+        intent.putExtra("token", sharedPreferences.getString("token", ""));
+        startActivity(intent);
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informacion);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
+
+        Log.e("VALUE POSITION", MainActivity.sitios.get(0).getNombre() +" "+ MainActivity.sitios.get(1).getNombre());
+
         ratingBar= findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
             public void onRatingChanged(RatingBar ratingBar, float rating,
@@ -71,6 +84,7 @@ public class InformacionActivity extends AppCompatActivity {
         imageView= findViewById(R.id.imageView5);
         if(valor!=-1){
             value=valor;
+            Log.e("POSITION VALUE ", String.valueOf(value));
             textView1.setText(MainActivity.sitios.get(valor).getNombre());
             textView2.setText(MainActivity.sitios.get(valor).getDireccion()+"\n"+MainActivity.sitios.get(valor).getDescripcion());
             ImageTask imageTask= new ImageTask();
