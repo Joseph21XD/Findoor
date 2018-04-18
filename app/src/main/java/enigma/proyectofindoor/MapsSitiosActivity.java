@@ -41,12 +41,15 @@ public class MapsSitiosActivity extends FragmentActivity implements OnMapReadyCa
     public static LatLng coordenadas;
     public static String dir="";
     private GoogleMap mMap;
+    private int value=0;
     SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps_sitios);
+        Intent intent= getIntent();
+        value= intent.getIntExtra("valor",-1);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
@@ -104,9 +107,15 @@ public class MapsSitiosActivity extends FragmentActivity implements OnMapReadyCa
         else{
             mMap.setMyLocationEnabled(true);
         }
+        if(value==-1){
         LatLng latLng = new LatLng(10, -84);
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 7);
-        mMap.animateCamera(cameraUpdate);
+        mMap.animateCamera(cameraUpdate);}
+        else{
+            LatLng latLng = new LatLng( Double.parseDouble(MainActivity.sitios.get(value).getLatitud()), Double.parseDouble(MainActivity.sitios.get(value).getLongitud()));
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 11);
+            mMap.animateCamera(cameraUpdate);
+        }
     }
 
     /** Called when the user clicks a marker. */

@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".Activity_ComentariosR">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.1"
+            android:src="@drawable/logo" />
+    </RelativeLayout>
+
     <ListView
         android:id="@+id/listaComentarios"
         android:layout_width="wrap_content"

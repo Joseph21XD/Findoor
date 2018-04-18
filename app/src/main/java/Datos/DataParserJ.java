@@ -134,6 +134,15 @@ public class DataParserJ {
                 case "Ú": resultado+="_G";
                     estado=true;
                     break;
+                case "*": resultado+="_H";
+                    estado=true;
+                    break;
+                case "{": resultado+="_J";
+                    estado=true;
+                    break;
+                case "}": resultado+="_K";
+                    estado=true;
+                    break;
                 default : resultado+="";
                     break;
             }
@@ -177,6 +186,12 @@ public class DataParserJ {
                         case "F": resultado+="Ó";
                             break;
                         case "G": resultado+="Ú";
+                            break;
+                        case "H": resultado+="*";
+                            break;
+                        case "J": resultado+="{";
+                            break;
+                        case "K": resultado+="}";
                             break;
                     }
                 }

@@ -231,5 +231,16 @@ public class InformacionActivity extends AppCompatActivity {
         }
     }
 
-    
+    public void mapear(View v){
+        Intent intent = new Intent(InformacionActivity.this, MapsSitiosActivity.class);
+        intent.putExtra("valor", value);
+        startActivity(intent);
+    }
+
+    public void comentar(View v){
+        Intent intent = new Intent(InformacionActivity.this, Activity_ComentariosR.class);
+        intent.putExtra("valor", value);
+        intent.putExtra("token", sharedPreferences.getString("token",""));
+        startActivity(intent);
+    }
 }
