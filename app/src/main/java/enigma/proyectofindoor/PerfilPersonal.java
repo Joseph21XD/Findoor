@@ -176,5 +176,10 @@ public class PerfilPersonal extends AppCompatActivity {
 
     }
 
+    public void buscar(View v){
+        Intent intent = new Intent(PerfilPersonal.this, BuscarActivity.class);
+        startActivity(intent);
+    }
+
 
 }

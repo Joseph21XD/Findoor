@@ -39,7 +39,6 @@ public class InformacionActivity extends AppCompatActivity {
         setContentView(R.layout.activity_informacion);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
 
-        Log.e("VALUE POSITION", MainActivity.sitios.get(0).getNombre() +" "+ MainActivity.sitios.get(1).getNombre());
 
         ratingBar= findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {

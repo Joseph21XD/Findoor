@@ -55,6 +55,7 @@ public class Activity_CercanosR extends AppCompatActivity {
     ListView listView;
     String tokenKey = "";
     CustomListView customListView;
+    boolean isCercano=true;
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -80,6 +81,7 @@ public class Activity_CercanosR extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.home:
                     mTextMessage.setText(R.string.bottom_menu_home);
+                    isCercano=true;
                     return true;
                 case R.id.heart:
                     mTextMessage.setText(R.string.bottom_menu_heart);
@@ -90,6 +92,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
                     Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
+                    isCercano=false;
                     return true;
                 case R.id.star:
                     mTextMessage.setText(R.string.bottom_menu_star);
@@ -100,8 +103,10 @@ public class Activity_CercanosR extends AppCompatActivity {
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
                     Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
+                    isCercano=false;
                     return true;
                 case R.id.user:
+                    isCercano=false;
                     mTextMessage.setText(R.string.bottom_menu_user);
                     Intent intent = new Intent(Activity_CercanosR.this,PerfilPersonal.class);
                     startActivity(intent);
@@ -124,10 +129,13 @@ public class Activity_CercanosR extends AppCompatActivity {
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
+                if(isCercano){
                 Log.i("location changed", location.toString());
-             /*   String temp = obtainJson(location);
+                String temp = obtainJsonCercanos(location);
                 listaCercanos = formatJsonName(temp);
-                listaICercanos = formatJsonImage(temp);*/
+                listaICercanos = formatJsonImage(temp);
+                tokenKey = formatJsonNewKey(temp);
+                customListView.notifyDataSetChanged();}
             }
 
             @Override
@@ -154,7 +162,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                 Log.d("ENTRA","IF IF");
                 if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
                     Log.d("ENTRA","IF IF IF");
-                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                    locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 100, locationListener);
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if(location != null){
                         Log.d("SITito", location.getLatitude()+" "+location.getLongitude());
