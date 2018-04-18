@@ -83,11 +83,11 @@ public class Recomendar extends AppCompatActivity {
                 resultado="";
             }
             if(resultado.equals("")){
-                Toast.makeText(getApplicationContext(),"Error al recomendar sitio", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),"Error al recomendar sitio", Toast.LENGTH_SHORT).show();
             }
             else{
                 sharedPreferences.edit().putString("token",resultado).apply();
-                Toast.makeText(getApplicationContext(),"Éxito al recomendar el sitio", Toast.LENGTH_SHORT);
+                Toast.makeText(getApplicationContext(),"Éxito al recomendar el sitio", Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -82,6 +82,60 @@ public class Activity_CercanosR extends AppCompatActivity {
                 case R.id.home:
                     mTextMessage.setText(R.string.bottom_menu_home);
                     isCercano=true;
+                    if(Build.VERSION.SDK_INT < 23){
+                        Log.d("ENTRA","IF ");
+                        int permissionCheck= ContextCompat.checkSelfPermission(Activity_CercanosR.this, Manifest.permission.ACCESS_FINE_LOCATION);
+                        Log.d("PERMISO",permissionCheck+"");
+                        if(permissionCheck==PackageManager.PERMISSION_DENIED){
+                            Log.d("ENTRA","IF IF");
+                            if(ActivityCompat.shouldShowRequestPermissionRationale(Activity_CercanosR.this,Manifest.permission.ACCESS_FINE_LOCATION)){
+                                Log.d("ENTRA","IF IF IF");
+                                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                                Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                                if(location != null){
+                                    Log.d("SITito", location.getLatitude()+" "+location.getLongitude());
+                                    temp = obtainJsonCercanos(location);
+                                    listaCercanos = formatJsonName(temp);
+                                    listaICercanos = formatJsonImage(temp);
+                                    tokenKey = formatJsonNewKey(temp);
+                                }
+                            }else{
+                                Log.d("ENTRA","IF IF ELSE");
+                                ActivityCompat.requestPermissions(Activity_CercanosR.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+                            }
+                        }
+                        else{
+                            Log.d("ENTRA","IF ELSE JA");
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                            Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            if(location != null){
+                                Log.d("ENTRA","ELSE IF");
+                                Log.d("GPS", location.getLatitude()+"");
+                                temp = obtainJsonCercanos(location);
+                                listaCercanos = formatJsonName(temp);
+                                listaICercanos = formatJsonImage(temp);
+                                tokenKey = formatJsonNewKey(temp);
+                            }
+                            else{
+                                Log.d("ENTRA","ELSE");
+                            }
+                        }
+                    }else{
+                        if(ActivityCompat.checkSelfPermission(Activity_CercanosR.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
+                            ActivityCompat.requestPermissions(Activity_CercanosR.this, new String[] {Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+                        }else{
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+                            Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                            if(location != null){
+                                temp = obtainJsonCercanos(location);
+                                listaCercanos = formatJsonName(temp);
+                                listaICercanos = formatJsonImage(temp);
+                                tokenKey = formatJsonNewKey(temp);
+                            }
+                        }
+                    }
+                    customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
+                    listView.setAdapter(customListView);
                     return true;
                 case R.id.heart:
                     mTextMessage.setText(R.string.bottom_menu_heart);
@@ -329,7 +383,7 @@ public class Activity_CercanosR extends AppCompatActivity {
                         DataParserJ.deparsear(jsonSitio.getString("imagen"))));
             }
 
-            Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
+
             return temp;
 
         } catch (JSONException e) {

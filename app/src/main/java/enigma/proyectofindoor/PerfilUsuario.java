@@ -127,5 +127,19 @@ public class PerfilUsuario extends AppCompatActivity {
         }
     }
 
+
+    public void visitadosClicked(View view){
+        Intent intent = new Intent(PerfilUsuario.this, Activity_Visitados_Otros.class);
+        intent.putExtra("Mode", "VISITED");
+        intent.putExtra("Value", value);
+        startActivity(intent);
+    }
+
+    public void favoritosClicked(View view){
+        Intent intent = new Intent(PerfilUsuario.this, Activity_Visitados_Otros.class);
+        intent.putExtra("Mode", "FAVORITE");
+        intent.putExtra("Value", value);
+        startActivity(intent);
+    }
     
 }

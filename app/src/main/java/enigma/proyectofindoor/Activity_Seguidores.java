@@ -21,13 +21,11 @@ import Datos.CustomListView;
 import Datos.DataParserJ;
 import Datos.JsonTask;
 import Datos.Persona;
-import Datos.Sitio;
 
-public class Activity_Seguidos extends AppCompatActivity {
+public class Activity_Seguidores extends AppCompatActivity {
 
-
-    ArrayList<String> listaSeguidos = new ArrayList<String>();
-    ArrayList<String> listaISeguidos = new ArrayList<String>();
+    ArrayList<String> listaSeguidores = new ArrayList<String>();
+    ArrayList<String> listaISeguidores = new ArrayList<String>();
     SharedPreferences sharedPreferences;
     ListView listView;
     String tokenKey = "";
@@ -36,7 +34,7 @@ public class Activity_Seguidos extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity__seguidos);
+        setContentView(R.layout.activity__seguidores);
 
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
@@ -44,14 +42,14 @@ public class Activity_Seguidos extends AppCompatActivity {
         /*
         tokenKey = intent.getStringExtra("token");
         Log.d("TOKEN", tokenKey+"");*/
-        listView = findViewById(R.id.listaSeguidos);
+        listView = findViewById(R.id.listaSeguidores);
 
-        String resultado = obtainJsonSeguidos();
-        listaSeguidos = formatJsonName(resultado);
-        listaISeguidos = formatJsonImage(resultado);
+        String resultado = obtainJsonSeguidores();
+        listaSeguidores = formatJsonName(resultado);
+        listaISeguidores = formatJsonImage(resultado);
         tokenKey = formatJsonNewKey(resultado);
 
-        customListView = new CustomListView(this, listaSeguidos, listaISeguidos);
+        customListView = new CustomListView(this, listaSeguidores, listaISeguidores);
         listView.setAdapter(customListView);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -64,12 +62,12 @@ public class Activity_Seguidos extends AppCompatActivity {
         });
     }
 
-    public String obtainJsonSeguidos(){
+    public String obtainJsonSeguidores(){
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.d("ENTRA A", "ObtainJsonSeguidos");
+        Log.d("ENTRA A", "ObtainJsonSeguidores");
         try {
-            result = jsonTask.execute("http://findoor.herokuapp.com/persona/seguidos/KEY="+tokenKey+"/").get();
+            result = jsonTask.execute("http://findoor.herokuapp.com/persona/seguidores/KEY="+tokenKey+"/").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
             Toast.makeText(this,e.toString(),Toast.LENGTH_SHORT).show();
@@ -113,7 +111,7 @@ public class Activity_Seguidos extends AppCompatActivity {
                 MainActivity.personas.add(new Persona(Integer.parseInt(DataParserJ.deparsear(jsonPersona.getString("id"))),DataParserJ.deparsear(jsonPersona.getString("nombre")),
                         DataParserJ.deparsear(jsonPersona.getString("apellido")),DataParserJ.deparsear(jsonPersona.getString("imagen"))));
             }
-
+            Log.i("jsonObject AQUI NOMBRE", temp.toString());
             return temp;
 
         } catch (JSONException e) {

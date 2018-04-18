@@ -80,6 +80,9 @@
         <activity android:name=".AcercaDe" />
         <activity android:name=".Activity_Seguidos" />
         <activity android:name=".BuscarActivity"></activity>
+        <activity android:name=".Activity_Seguidores" />
+        <activity android:name=".Activity_Visitados" />
+        <activity android:name=".Activity_Visitados_Otros"></activity>
     </application>
 
 </manifest>
