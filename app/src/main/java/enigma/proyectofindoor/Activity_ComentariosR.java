@@ -31,18 +31,17 @@ public class Activity_ComentariosR extends AppCompatActivity {
     SharedPreferences sharedPreferences;
     ListView listView;
     String tokenKey = "";
-    int value=0;
+    int idlugar;
     CustomListViewComentarios customListView;
 
 
     public void comentarClicked(View view){
-        if(value!=-1){
         EditText editText = (EditText) findViewById(R.id.comentario);
         String comentario = editText.getText().toString();
         JsonTask jsonTask = new JsonTask();
         try {
             comentario = DataParserJ.parsear(comentario);
-            String respuesta = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+MainActivity.sitios.get(value).getId()+"/"+ comentario +"/KEY="+ tokenKey + "/").get();
+            String respuesta = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+ idlugar +"/"+ comentario +"/KEY="+ tokenKey + "/").get();
             tokenKey = respuesta;
         } catch (InterruptedException e) {
             e.printStackTrace();
@@ -50,7 +49,7 @@ public class Activity_ComentariosR extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        String temp = obtainJsonUsuariosComentarios();
+        String temp = obtainJsonUsuariosComentarios(idlugar);
         listaUsuarios = formatJsonName(temp);
         listaIUsuarios = formatJsonImage(temp);
         listaComentarios = formatJsonComment(temp);
@@ -58,7 +57,10 @@ public class Activity_ComentariosR extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listaComentarios);
         customListView = new CustomListViewComentarios(this, listaUsuarios, listaIUsuarios, listaComentarios);
-        listView.setAdapter(customListView);}
+        listView.setAdapter(customListView);
+
+        editText.setText("");
+        Log.e("AQUI VA EL KEY", tokenKey);
 
     }
 
@@ -70,9 +72,9 @@ public class Activity_ComentariosR extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = intent.getStringExtra("token");
-        value= intent.getIntExtra("valor",-1);
-        if(value!=-1){
-        String temp = obtainJsonUsuariosComentarios();
+        int pos = intent.getIntExtra("IDlugar", -1);
+        idlugar =  MainActivity.sitios.get(pos).getId();
+        String temp = obtainJsonUsuariosComentarios(idlugar);
         listaUsuarios = formatJsonName(temp);
         listaIUsuarios = formatJsonImage(temp);
         listaComentarios = formatJsonComment(temp);
@@ -80,16 +82,16 @@ public class Activity_ComentariosR extends AppCompatActivity {
 
         listView = (ListView) findViewById(R.id.listaComentarios);
         customListView = new CustomListViewComentarios(this, listaUsuarios, listaIUsuarios, listaComentarios);
-        listView.setAdapter(customListView);}
+        listView.setAdapter(customListView);
     }
 
 
-    public String obtainJsonUsuariosComentarios(){
+    public String obtainJsonUsuariosComentarios(int id){
         String result = "";
         JsonTask jsonTask = new JsonTask();
         Log.e("ENTRA A", "obtainJsonUsuariosComentarios");
         try {
-            result = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+MainActivity.sitios.get(value).getId()+".json/KEY="+tokenKey+"/").get();
+            result = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+ id +".json/KEY="+tokenKey+"/").get();
         } catch (InterruptedException e) {
             e.printStackTrace();
             Toast.makeText(this,e.toString(),Toast.LENGTH_SHORT).show();

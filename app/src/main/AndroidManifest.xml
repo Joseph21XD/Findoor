@@ -78,6 +78,7 @@
             android:name=".MapsSitiosActivity"
             android:label="@string/title_activity_maps_sitios" />
         <activity android:name=".AcercaDe"></activity>
+        <activity android:name=".Activity_Seguidos"></activity>
     </application>
 
 </manifest>
