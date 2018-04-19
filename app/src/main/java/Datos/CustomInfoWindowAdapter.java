@@ -33,7 +33,6 @@ public class CustomInfoWindowAdapter implements GoogleMap.InfoWindowAdapter {
     public View getInfoContents(final Marker m) {
         //Carga layout personalizado.
         View v = inflater.inflate(R.layout.infowindow, null);
-        Log.d("TAG", m.getTag()+"");
         ((TextView)v.findViewById(R.id.info_window_nombre)).setText(MainActivity.sitios.get(Integer.parseInt(m.getTag()+"")).getNombre());
         ((TextView)v.findViewById(R.id.info_window_placas)).setText(MainActivity.sitios.get(Integer.parseInt(m.getTag()+"")).getDireccion());
 

@@ -154,7 +154,6 @@ public class DataParserJ {
                     resultado+="_"+k.toLowerCase();
                 }
             }}
-        System.out.println(resultado);
         return resultado;
     }
 

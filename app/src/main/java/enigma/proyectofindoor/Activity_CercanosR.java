@@ -83,41 +83,31 @@ public class Activity_CercanosR extends AppCompatActivity {
                     mTextMessage.setText(R.string.bottom_menu_home);
                     isCercano=true;
                     if(Build.VERSION.SDK_INT < 23){
-                        Log.d("ENTRA","IF ");
                         int permissionCheck= ContextCompat.checkSelfPermission(Activity_CercanosR.this, Manifest.permission.ACCESS_FINE_LOCATION);
-                        Log.d("PERMISO",permissionCheck+"");
                         if(permissionCheck==PackageManager.PERMISSION_DENIED){
-                            Log.d("ENTRA","IF IF");
                             if(ActivityCompat.shouldShowRequestPermissionRationale(Activity_CercanosR.this,Manifest.permission.ACCESS_FINE_LOCATION)){
-                                Log.d("ENTRA","IF IF IF");
                                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                                 Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                                 if(location != null){
-                                    Log.d("SITito", location.getLatitude()+" "+location.getLongitude());
                                     temp = obtainJsonCercanos(location);
                                     listaCercanos = formatJsonName(temp);
                                     listaICercanos = formatJsonImage(temp);
                                     tokenKey = formatJsonNewKey(temp);
                                 }
                             }else{
-                                Log.d("ENTRA","IF IF ELSE");
                                 ActivityCompat.requestPermissions(Activity_CercanosR.this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
                             }
                         }
                         else{
-                            Log.d("ENTRA","IF ELSE JA");
                             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                             Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                             if(location != null){
-                                Log.d("ENTRA","ELSE IF");
-                                Log.d("GPS", location.getLatitude()+"");
                                 temp = obtainJsonCercanos(location);
                                 listaCercanos = formatJsonName(temp);
                                 listaICercanos = formatJsonImage(temp);
                                 tokenKey = formatJsonNewKey(temp);
                             }
                             else{
-                                Log.d("ENTRA","ELSE");
                             }
                         }
                     }else{
@@ -145,7 +135,6 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
-                    Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
                     isCercano=false;
                     return true;
                 case R.id.star:
@@ -156,7 +145,6 @@ public class Activity_CercanosR extends AppCompatActivity {
                     tokenKey = formatJsonNewKey(temp);
                     customListView = new CustomListView(Activity_CercanosR.this, listaCercanos, listaICercanos);
                     listView.setAdapter(customListView);
-                    Log.e("Lista Sitios", MainActivity.sitios.get(0).getNombre());
                     isCercano=false;
                     return true;
                 case R.id.user:
@@ -177,14 +165,12 @@ public class Activity_CercanosR extends AppCompatActivity {
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = intent.getStringExtra("token");
-        Log.d("TOKEN", tokenKey+"");
         listView = findViewById(R.id.listaCercanos);
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(Location location) {
                 if(isCercano){
-                Log.i("location changed", location.toString());
                 String temp = obtainJsonCercanos(location);
                 listaCercanos = formatJsonName(temp);
                 listaICercanos = formatJsonImage(temp);
@@ -209,41 +195,31 @@ public class Activity_CercanosR extends AppCompatActivity {
         };
 
         if(Build.VERSION.SDK_INT < 23){
-            Log.d("ENTRA","IF ");
             int permissionCheck= ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION);
-            Log.d("PERMISO",permissionCheck+"");
             if(permissionCheck==PackageManager.PERMISSION_DENIED){
-                Log.d("ENTRA","IF IF");
                 if(ActivityCompat.shouldShowRequestPermissionRationale(this,Manifest.permission.ACCESS_FINE_LOCATION)){
-                    Log.d("ENTRA","IF IF IF");
                     locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 100, locationListener);
                     Location location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                     if(location != null){
-                        Log.d("SITito", location.getLatitude()+" "+location.getLongitude());
                         String temp = obtainJsonCercanos(location);
                         listaCercanos = formatJsonName(temp);
                         listaICercanos = formatJsonImage(temp);
                         tokenKey = formatJsonNewKey(temp);
                     }
                 }else{
-                    Log.d("ENTRA","IF IF ELSE");
                     ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
                 }
             }
             else{
-                Log.d("ENTRA","IF ELSE JA");
                 locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
                 Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if(location != null){
-                    Log.d("ENTRA","ELSE IF");
-                    Log.d("GPS", location.getLatitude()+"");
                     String temp = obtainJsonCercanos(location);
                     listaCercanos = formatJsonName(temp);
                     listaICercanos = formatJsonImage(temp);
                     tokenKey = formatJsonNewKey(temp);
                 }
                 else{
-                    Log.d("ENTRA","ELSE");
                 }
             }
         }else{
@@ -292,7 +268,6 @@ public class Activity_CercanosR extends AppCompatActivity {
     public String obtainJsonCercanos(Location location){
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.d("ENTRA A", "ObtainJsonCercanos");
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/sitio/close/"+DataParserJ.parsear(getLat(location))+"/"+ DataParserJ.parsear(getLon(location))+"/KEY="+tokenKey+"/").get();
         } catch (InterruptedException e) {
@@ -307,7 +282,6 @@ public class Activity_CercanosR extends AppCompatActivity {
 
     public String obtainJsonFavoritos( ){
         String result = "";
-        Log.d("ENTRA A", "ObtainJsonFavoritos");
         JsonTask jsonTask = new JsonTask();
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/sitio/TYPE=FAVORITE/"+MainActivity.persona.getId()+"/KEY=" + tokenKey + "/").get();
@@ -323,7 +297,6 @@ public class Activity_CercanosR extends AppCompatActivity {
 
     public String obtainJsonPopulares(){
         String result = "";
-        Log.d("ENTRA A", "ObtainJsonPopulares");
         JsonTask jsonTask = new JsonTask();
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/sitio/ranking.json/KEY=" + tokenKey + "/").get();
@@ -348,14 +321,12 @@ public class Activity_CercanosR extends AppCompatActivity {
     }
 
     public String formatJsonNewKey(String resul){
-        Log.d("ENTRA A", "formatJsonNewKey");
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
             String key = jsonObject.getString("token");
             sharedPreferences.edit().putString("token",key).apply();
-            Log.i("jsonObject KEY FINAL", key);
             return key;
 
         } catch (JSONException e) {
@@ -406,7 +377,6 @@ public class Activity_CercanosR extends AppCompatActivity {
                 JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("imagen")));
             }
-            Log.i("jsonObject AQUI IMAGEN", temp.toString());
             return temp;
 
         } catch (JSONException e) {

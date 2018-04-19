@@ -39,9 +39,6 @@ public class Activity_Seguidores extends AppCompatActivity {
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = sharedPreferences.getString("token", "");
-        /*
-        tokenKey = intent.getStringExtra("token");
-        Log.d("TOKEN", tokenKey+"");*/
         listView = findViewById(R.id.listaSeguidores);
 
         String resultado = obtainJsonSeguidores();
@@ -65,7 +62,6 @@ public class Activity_Seguidores extends AppCompatActivity {
     public String obtainJsonSeguidores(){
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.d("ENTRA A", "ObtainJsonSeguidores");
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/persona/seguidores/KEY="+tokenKey+"/").get();
         } catch (InterruptedException e) {
@@ -79,14 +75,12 @@ public class Activity_Seguidores extends AppCompatActivity {
     }
 
     public String formatJsonNewKey(String resul){
-        Log.d("ENTRA A", "formatJsonNewKey");
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
             String key = jsonObject.getString("token");
             sharedPreferences.edit().putString("token",key).apply();
-            Log.i("jsonObject KEY FINAL", key);
             return key;
 
         } catch (JSONException e) {
@@ -111,7 +105,6 @@ public class Activity_Seguidores extends AppCompatActivity {
                 MainActivity.personas.add(new Persona(Integer.parseInt(DataParserJ.deparsear(jsonPersona.getString("id"))),DataParserJ.deparsear(jsonPersona.getString("nombre")),
                         DataParserJ.deparsear(jsonPersona.getString("apellido")),DataParserJ.deparsear(jsonPersona.getString("imagen"))));
             }
-            Log.i("jsonObject AQUI NOMBRE", temp.toString());
             return temp;
 
         } catch (JSONException e) {
@@ -134,7 +127,6 @@ public class Activity_Seguidores extends AppCompatActivity {
                 JSONObject jsonPersona = new JSONObject(jsonArray.getString(i));
                 temp.add(DataParserJ.deparsear(jsonPersona.getString("imagen")));
             }
-            Log.i("jsonObject AQUI IMAGEN", temp.toString());
             return temp;
 
         } catch (JSONException e) {

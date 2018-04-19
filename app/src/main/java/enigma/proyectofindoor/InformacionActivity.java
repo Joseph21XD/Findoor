@@ -49,13 +49,11 @@ public class InformacionActivity extends AppCompatActivity {
                                         boolean fromUser) {
                 if(fromUser) {
                     int x= (int)(rating*2);
-                    Log.d("NUMERO",(int)(rating*2)+"");
                     String tok= sharedPreferences.getString("token", "");
                     String url = "http://findoor.herokuapp.com/sitio/ranking/add/"+MainActivity.sitios.get(value).getId()+"/"+x+"/KEY="+tok+"/";
                     JsonTask jsonTask= new JsonTask();
                     try {
                         String resultado = jsonTask.execute(url).get();
-                        Log.d("JSON", resultado);
                         sharedPreferences.edit().putString("token",resultado).apply();
                     }
                     catch (InterruptedException e) {
@@ -94,14 +92,11 @@ public class InformacionActivity extends AppCompatActivity {
             JsonTask jsonTask= new JsonTask();
             try {
                 String resultado = jsonTask.execute(url).get();
-                Log.d("JSON", resultado);
                 JSONObject obj = new JSONObject(resultado);
                 String respuesta = obj.getString("respuesta");
-                Log.d("respuesta", respuesta);
                 String token = obj.getString("token");
                 sharedPreferences.edit().putString("token",token).apply();
                 if(respuesta.equals("true")){
-                    Log.d("SI", "ENTRO");
                     ImageView imageView= findViewById(R.id.imageView6);
                     imageView.setImageResource(R.drawable.logo_lleno);
                     favorito= 1;
@@ -117,14 +112,11 @@ public class InformacionActivity extends AppCompatActivity {
             JsonTask jsonTask2= new JsonTask();
             try {
                 String resultado = jsonTask2.execute(url).get();
-                Log.d("JSON", resultado);
                 JSONObject obj = new JSONObject(resultado);
                 String respuesta = obj.getString("respuesta");
-                Log.d("respuesta", respuesta);
                 String token = obj.getString("token");
                 sharedPreferences.edit().putString("token",token).apply();
                 if(respuesta.equals("true")){
-                    Log.d("SI", "ENTRO");
                     ImageView imageView= findViewById(R.id.imageView7);
                     imageView.setImageResource(R.drawable.visitado);
                     visitado= 1;
@@ -141,7 +133,6 @@ public class InformacionActivity extends AppCompatActivity {
             JsonTask jsonTask1= new JsonTask();
             try {
                 String resultado = jsonTask1.execute(url).get();
-                Log.d("JSON", resultado);
                 JSONObject obj = new JSONObject(resultado);
                 int respuesta = Integer.parseInt(obj.getString("respuesta"));
                 String token = obj.getString("token");
@@ -149,7 +140,6 @@ public class InformacionActivity extends AppCompatActivity {
                 if(respuesta!=0){
                 RatingBar ratingBar= findViewById(R.id.ratingBar);
                 float f= (float) respuesta/2;
-                Log.d("FLOAT", f+"");
                 ratingBar.setRating(f);}
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -166,7 +156,6 @@ public class InformacionActivity extends AppCompatActivity {
     public void pushTortuga(View v)  {
         ImageView imageView= (ImageView)v;
         if(favorito==0){
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/sitio/add/TYPE=FAVORITE/"+MainActivity.sitios.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();
@@ -189,7 +178,6 @@ public class InformacionActivity extends AppCompatActivity {
             }
         }
         else{
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/sitio/delete/TYPE=FAVORITE/"+MainActivity.sitios.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();
@@ -216,7 +204,6 @@ public class InformacionActivity extends AppCompatActivity {
     public void pushHouse(View v)  {
         ImageView imageView= (ImageView)v;
         if(visitado==0){
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/sitio/add/TYPE=VISITED/"+MainActivity.sitios.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();
@@ -239,7 +226,6 @@ public class InformacionActivity extends AppCompatActivity {
             }
         }
         else{
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/sitio/delete/TYPE=VISITED/"+MainActivity.sitios.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();

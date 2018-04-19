@@ -69,7 +69,6 @@ public class Activity_ComentariosR extends AppCompatActivity {
         listView.setAdapter(customListView);
 
         editText.setText("");
-        Log.e("AQUI VA EL KEY", tokenKey);
 
     }
 
@@ -104,7 +103,6 @@ public class Activity_ComentariosR extends AppCompatActivity {
     public String obtainJsonUsuariosComentarios(int id){
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.e("ENTRA A", "obtainJsonUsuariosComentarios");
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+ id +".json/KEY="+tokenKey+"/").get();
         } catch (InterruptedException e) {
@@ -118,14 +116,12 @@ public class Activity_ComentariosR extends AppCompatActivity {
     }
 
     public String formatJsonNewKey(String resul){
-        Log.d("ENTRA A", "formatJsonNewKey");
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
             String key = jsonObject.getString("token");
             sharedPreferences.edit().putString("token",key).apply();
-            Log.i("jsonObject KEY FINAL", key);
             return key;
 
         } catch (JSONException e) {
@@ -148,7 +144,6 @@ public class Activity_ComentariosR extends AppCompatActivity {
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("nombre")) + " " + DataParserJ.deparsear(jsonSitio.getString("apellido")));
             }
 
-            Log.i("jsonObject AQUI NOMBRE", temp.toString());
             return temp;
 
         } catch (JSONException e) {
@@ -170,7 +165,6 @@ public class Activity_ComentariosR extends AppCompatActivity {
                 JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("imagen")));
             }
-            Log.i("jsonObject AQUI IMAGEN", temp.toString());
             return temp;
 
         } catch (JSONException e) {
@@ -193,7 +187,6 @@ public class Activity_ComentariosR extends AppCompatActivity {
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("comentario")));
             }
 
-            Log.i("jsonObject COMENTARIO", temp.toString());
             return temp;
 
         } catch (JSONException e) {

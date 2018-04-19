@@ -69,10 +69,8 @@ public class Recomendar extends AppCompatActivity {
             String dir= DataParserJ.parsear(editText4.getText().toString());
             String desc= DataParserJ.parsear(editText5.getText().toString());
             String image= DataParserJ.parsear(editText6.getText().toString());
-            ////sitio/suggest/nombre/lat/lon/dir/desc/img/KEY=token
             String token= sharedPreferences.getString("token", "");
             String url = "https://findoor.herokuapp.com/sitio/suggest/"+nombre+"/"+lat+"/"+lon+"/"+dir+"/"+desc+"/"+image+"/KEY="+token+"/";
-            Log.d("SITIO", url);
             JsonTask downloadTask = new JsonTask();
             String resultado= "";
             try {
@@ -95,7 +93,6 @@ public class Recomendar extends AppCompatActivity {
     public void cargar(View view) throws ExecutionException, InterruptedException {
         String s= editText6.getText().toString();
         Bitmap bmp;
-        Log.d("URL",s);
         if(s.length()>0){
             ImageTask imageTask= new ImageTask();
             bmp= imageTask.execute(s).get();

@@ -126,10 +126,6 @@ public class MapsRecomendarActivity extends FragmentActivity implements OnMapRea
         marker.icon(BitmapDescriptorFactory.fromResource(icon));
         site = mMap.addMarker(marker);
         site.setTag(0);
-        Log.d("LAT", coordenadas.latitude+"");
-        Log.d("LON", coordenadas.longitude+"");
-
-
     }
 
     public void aceptarCoor(View view){

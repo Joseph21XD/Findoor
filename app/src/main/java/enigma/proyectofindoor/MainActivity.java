@@ -99,16 +99,9 @@ public class MainActivity extends AppCompatActivity {
         editText1= findViewById(R.id.editText2);
         editText2= findViewById(R.id.editText);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
-        /*sharedPreferences.edit().putString("auth_token","2qwHJDSFIOIDwad").apply();*/
         if(AccessToken.getCurrentAccessToken()!=null){
             accessToken= AccessToken.getCurrentAccessToken();
             Profile profile= Profile.getCurrentProfile();
-            Log.d("ID", profile.getId());
-            Log.d("NAME", profile.getFirstName());
-            Log.d("LAST NAME ", profile.getLastName());
-            Log.d("MIDDLE NAME ", profile.getMiddleName());
-            Log.d("URL", profile.getLinkUri().toString());
-            Log.d("URL2", profile.getProfilePictureUri(100,100).toString());
             isfacebook=true;
             try {
                 logFacebook(profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getProfilePictureUri(100,100).toString());
@@ -146,7 +139,6 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         String token= sharedPreferences.getString("token", "");
         if(token.length()>0){
-            // https://findoor.herokuapp.com/persona/token/token
             String url = "https://findoor.herokuapp.com/persona/token/"+token+"/";
             JsonTask downloadTask = new JsonTask();
             String resultado= null;
@@ -168,7 +160,6 @@ public class MainActivity extends AppCompatActivity {
                 int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
                 String tok= obj.getString("token");
                 persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
-                Log.d("PERSONA", persona.toString());
                 sharedPreferences.edit().putString("token",tok).apply();
                 Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
                 intent.putExtra("token", tok);
@@ -193,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
     public void ingresar(View view) throws ExecutionException, InterruptedException {
         String user = editText1.getText().toString();
         String pwd = editText2.getText().toString();
-        // https://findoor.herokuapp.com/persona/login/jajaKgmailPcom/123/
         String url = "https://findoor.herokuapp.com/persona/login/"+DataParserJ.parsear(user)+"/"+DataParserJ.parsear(pwd)+"/";
         JsonTask downloadTask = new JsonTask();
         String resultado=downloadTask.execute(url).get();
@@ -206,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
             int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
             String tok= obj.getString("token");
             persona= new Persona(id, nom,ap,user,pwd,img,tok,isf);
-            Log.d("PERSONA", persona.toString());
             sharedPreferences.edit().putString("token",tok).apply();
             Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
             intent.putExtra("token", tok);
@@ -252,7 +241,6 @@ public class MainActivity extends AppCompatActivity {
                 int isf= Integer.parseInt(DataParserJ.deparsear(obj.getString("isface")));
                 String tok= obj.getString("token");
                 persona= new Persona(idetify, nom,ap,correo,"facebook",img,tok,isf);
-                Log.d("PERSONA", persona.toString());
                 sharedPreferences.edit().putString("token",tok).apply();
                 Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
                 intent.putExtra("token", tok);
