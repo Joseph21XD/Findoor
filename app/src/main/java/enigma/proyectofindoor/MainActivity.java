@@ -25,6 +25,7 @@ import com.facebook.GraphResponse;
 import com.facebook.Profile;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ import Datos.*;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String MIXPANEL_TOKEN = "3c4b7583313688d65dfcacdff72ba77c";
     public static Persona persona= new Persona();
     public static ArrayList<Sitio> sitios= new ArrayList<>();
     public static ArrayList<Persona> personas= new ArrayList<>();
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
     AccessToken accessToken;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
+    MixpanelAPI mixpanel;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,6 +95,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState)  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        mixpanel = MixpanelAPI.getInstance(MainActivity.this, MIXPANEL_TOKEN);
         editText1= findViewById(R.id.editText2);
         editText2= findViewById(R.id.editText);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
@@ -168,12 +172,22 @@ public class MainActivity extends AppCompatActivity {
                 sharedPreferences.edit().putString("token",tok).apply();
                 Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
                 intent.putExtra("token", tok);
+                JSONObject props = new JSONObject();
+                props.put("Name", nom);
+                props.put("Last-Name", ap);
+                mixpanel.track("Log in Findoor", props);
                 startActivity(intent);
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 
     public void ingresar(View view) throws ExecutionException, InterruptedException {
@@ -196,6 +210,10 @@ public class MainActivity extends AppCompatActivity {
             sharedPreferences.edit().putString("token",tok).apply();
             Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
             intent.putExtra("token", tok);
+            JSONObject props = new JSONObject();
+            props.put("Name", nom);
+            props.put("Last-Name", ap);
+            mixpanel.track("Log in Findoor", props);
             startActivity(intent);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();
@@ -238,6 +256,10 @@ public class MainActivity extends AppCompatActivity {
                 sharedPreferences.edit().putString("token",tok).apply();
                 Intent intent = new Intent(MainActivity.this, Activity_CercanosR.class);
                 intent.putExtra("token", tok);
+                JSONObject props = new JSONObject();
+                props.put("Name", nom);
+                props.put("Last-Name", ap);
+                mixpanel.track("Log in Facebook", props);
                 startActivity(intent);
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(),"Error! Datos de ingreso incorrectos",Toast.LENGTH_SHORT).show();

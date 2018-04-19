@@ -31,4 +31,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     compile 'com.microsoft.azure.android:azure-storage-android:0.8.0@aar'
     compile 'com.facebook.android:facebook-android-sdk:[4,5)'
+    compile 'com.mixpanel.android:mixpanel-android:5.+'
+    compile 'com.google.android.gms:play-services-gcm:7.5.0+'
 }

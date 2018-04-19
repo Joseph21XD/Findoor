@@ -45,16 +45,19 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class Registrar extends AppCompatActivity {
+    public static final String MIXPANEL_TOKEN = "3c4b7583313688d65dfcacdff72ba77c";
     SharedPreferences sharedPreferences;
     EditText editText1, editText2, editText3, editText4;
     public static Persona persona;
     final String validChars = "abcdefghijklmnopqrstuvwxyz";
     SecureRandom rnd = new SecureRandom();
     String valor="";
+    MixpanelAPI mixpanel;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -62,6 +65,7 @@ public class Registrar extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mixpanel = MixpanelAPI.getInstance(Registrar.this, MIXPANEL_TOKEN);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         setContentView(R.layout.activity_registrar);
         editText1 = findViewById(R.id.editText);
@@ -72,7 +76,7 @@ public class Registrar extends AppCompatActivity {
         valor= randomString(10);
     }
 
-    public void ingresar(View view) throws ExecutionException, InterruptedException {
+    public void ingresar(View view) throws ExecutionException, InterruptedException, JSONException {
         String correo = editText3.getText().toString();
         if (correo.contains("@") && correo.contains(".com") && (correo.contains("hotmail") || correo.contains("gmail")) && correo.length() > 10) {
             String nombre = editText1.getText().toString();
@@ -99,6 +103,10 @@ public class Registrar extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Correo no permitido, cambie de correo", Toast.LENGTH_SHORT).show();
                     }
                     else{
+                        JSONObject props = new JSONObject();
+                        props.put("Name", DataParserJ.deparsear(persona.getNombre())+"");
+                        props.put("Last-Name", DataParserJ.deparsear(persona.getApellido())+"");
+                        mixpanel.track("Sign in Findoor", props);
                         new AlertDialog.Builder(this).setIcon(R.drawable.logo_lleno)
                                 .setTitle("Ya estás logueado")
                                 .setMessage("Quiere empezar la experiencia Findoor?")
@@ -231,6 +239,12 @@ public class Registrar extends AppCompatActivity {
         for( int i = 0; i < len; i++ )
             sb.append( validChars.charAt( rnd.nextInt(validChars.length()) ) );
         return sb.toString();
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 
 }

@@ -61,6 +61,7 @@ public class BuscarActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String s) {
                 listaICercanos.clear();
                 listaCercanos.clear();
+                MainActivity.personas.clear();
                 token=sharedPreferences.getString("token","");
                 s= DataParserJ.parsear(s);
                 String url= "http://findoor.herokuapp.com/persona/search/"+s+"/KEY="+token+"/";

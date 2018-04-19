@@ -11,6 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -20,15 +22,17 @@ import Datos.ImageTask;
 import Datos.JsonTask;
 
 public class PerfilUsuario extends AppCompatActivity {
-
+    public static final String MIXPANEL_TOKEN = "3c4b7583313688d65dfcacdff72ba77c";
     SharedPreferences sharedPreferences;
     int value=-1;
     int seguido=0;
+    MixpanelAPI mixpanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_usuario);
+        mixpanel = MixpanelAPI.getInstance(PerfilUsuario.this, MIXPANEL_TOKEN);
         Intent intent= getIntent();
         value= intent.getIntExtra("valor",-1);
     }
@@ -100,9 +104,15 @@ public class PerfilUsuario extends AppCompatActivity {
                 t.setText("Siguiendo...");
                 seguido=1;
                 Toast.makeText(getApplicationContext(),"Sigues a "+MainActivity.personas.get(value).getNombre(),Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("add followed", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
                 e.printStackTrace();
             }
         }
@@ -119,9 +129,15 @@ public class PerfilUsuario extends AppCompatActivity {
                 t.setText("Seguir");
                 seguido=0;
                 Toast.makeText(getApplicationContext(),"Ya no sigues a "+MainActivity.personas.get(value).getNombre(),Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("delete followed", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
                 e.printStackTrace();
             }
         }
@@ -140,6 +156,12 @@ public class PerfilUsuario extends AppCompatActivity {
         intent.putExtra("Mode", "FAVORITE");
         intent.putExtra("Value", value);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
     
 }

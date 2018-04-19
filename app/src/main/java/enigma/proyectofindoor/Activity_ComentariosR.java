@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +26,7 @@ import Datos.DataParserJ;
 import Datos.JsonTask;
 
 public class Activity_ComentariosR extends AppCompatActivity {
-
+    public static final String MIXPANEL_TOKEN = "3c4b7583313688d65dfcacdff72ba77c";
     ArrayList<String> listaUsuarios = new ArrayList<String>();
     ArrayList<String> listaIUsuarios = new ArrayList<String>();
     ArrayList<String> listaComentarios = new ArrayList<String>();
@@ -33,6 +35,7 @@ public class Activity_ComentariosR extends AppCompatActivity {
     String tokenKey = "";
     int idlugar;
     CustomListViewComentarios customListView;
+    MixpanelAPI mixpanel;
 
 
     public void comentarClicked(View view){
@@ -43,9 +46,15 @@ public class Activity_ComentariosR extends AppCompatActivity {
             comentario = DataParserJ.parsear(comentario);
             String respuesta = jsonTask.execute("http://findoor.herokuapp.com/sitio/comment/"+ idlugar +"/"+ comentario +"/KEY="+ tokenKey + "/").get();
             tokenKey = respuesta;
+            JSONObject props = new JSONObject();
+            props.put("Name", MainActivity.persona.getNombre());
+            props.put("Last-Name", MainActivity.persona.getApellido());
+            mixpanel.track("add comment", props);
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (JSONException e){
             e.printStackTrace();
         }
 
@@ -65,10 +74,16 @@ public class Activity_ComentariosR extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity__comentarios_r);
-
+        mixpanel = MixpanelAPI.getInstance(Activity_ComentariosR.this, MIXPANEL_TOKEN);
         sharedPreferences = this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = intent.getStringExtra("token");

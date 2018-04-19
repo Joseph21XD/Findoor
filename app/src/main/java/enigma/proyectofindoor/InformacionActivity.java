@@ -12,6 +12,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mixpanel.android.mpmetrics.MixpanelAPI;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -23,6 +25,7 @@ import Datos.ImageTask;
 import Datos.JsonTask;
 
 public class InformacionActivity extends AppCompatActivity {
+    public static final String MIXPANEL_TOKEN = "3c4b7583313688d65dfcacdff72ba77c";
     TextView textView1, textView2;
     RatingBar ratingBar;
     SharedPreferences sharedPreferences;
@@ -30,6 +33,7 @@ public class InformacionActivity extends AppCompatActivity {
     int favorito= 0;
     int visitado=0;
     int value=0;
+    MixpanelAPI mixpanel;
 
 
 
@@ -37,6 +41,7 @@ public class InformacionActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_informacion);
+        mixpanel = MixpanelAPI.getInstance(InformacionActivity.this, MIXPANEL_TOKEN);
         sharedPreferences= this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         ratingBar= findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -171,9 +176,15 @@ public class InformacionActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.logo_lleno);
                 favorito=1;
                 Toast.makeText(getApplicationContext(),MainActivity.sitios.get(value).getNombre()+" es favorito",Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("Add Favorite", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
                 e.printStackTrace();
             }
         }
@@ -188,10 +199,16 @@ public class InformacionActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.logo_vacio);
                 favorito=0;
                 Toast.makeText(getApplicationContext(),MainActivity.sitios.get(value).getNombre()+" ya no es favorito",Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("delete Favorite", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
                 e.printStackTrace();
+            } catch (JSONException e){
+            e.printStackTrace();
             }
         }
     }
@@ -209,9 +226,15 @@ public class InformacionActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.visitado);
                 visitado=1;
                 Toast.makeText(getApplicationContext(),MainActivity.sitios.get(value).getNombre()+" fue visitado",Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("add Visited", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
                 e.printStackTrace();
             }
         }
@@ -226,9 +249,15 @@ public class InformacionActivity extends AppCompatActivity {
                 imageView.setImageResource(R.drawable.visitar);
                 visitado=0;
                 Toast.makeText(getApplicationContext(),MainActivity.sitios.get(value).getNombre()+" no fue visitado",Toast.LENGTH_SHORT).show();
+                JSONObject props = new JSONObject();
+                props.put("Name", MainActivity.persona.getNombre());
+                props.put("Last-Name", MainActivity.persona.getApellido());
+                mixpanel.track("delete Visited", props);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e){
                 e.printStackTrace();
             }
         }
@@ -246,5 +275,11 @@ public class InformacionActivity extends AppCompatActivity {
         intent.putExtra("token", sharedPreferences.getString("token", ""));
         startActivity(intent);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        mixpanel.flush();
+        super.onDestroy();
     }
 }
