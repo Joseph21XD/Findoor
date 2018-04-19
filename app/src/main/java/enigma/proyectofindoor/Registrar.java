@@ -90,7 +90,7 @@ public class Registrar extends AppCompatActivity {
                     persona.setContrasenna(contrasenna);
                     if (persona.getUrlImagen().length() == 0) {
                         persona.setUrlImagen("https://findoor.blob.core.windows.net/imagenes/logo.png");
-                        Log.d("ENTRA", "IF");}
+                    }
                     String url = "https://findoor.herokuapp.com/persona/add/"+persona.getNombre()+"/"+persona.getApellido()+"/"
                             +persona.getIsFacebook()+"/"+persona.getCorreo()+"/"+persona.getContrasenna()+"/"+DataParserJ.parsear(persona.getUrlImagen())+"/";
                     JsonTask downloadTask = new JsonTask();

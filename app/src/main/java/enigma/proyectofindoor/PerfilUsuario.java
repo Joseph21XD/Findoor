@@ -57,19 +57,15 @@ public class PerfilUsuario extends AppCompatActivity {
     }
 
     public void isSeguido(){
-        //https://findoor.herokuapp.com/persona/seguido/2/KEY=dHIDVcnvHroP6o3hbeIK/
         String url="http://findoor.herokuapp.com/persona/seguido/"+MainActivity.personas.get(value).getId()+"/KEY="+sharedPreferences.getString("token", "")+"/";
         JsonTask jsonTask= new JsonTask();
         try {
             String resultado = jsonTask.execute(url).get();
-            Log.d("JSON", resultado);
             JSONObject obj = new JSONObject(resultado);
             String respuesta = obj.getString("respuesta");
-            Log.d("respuesta", respuesta);
             String token = obj.getString("token");
             sharedPreferences.edit().putString("token",token).apply();
             if(respuesta.equals("true")){
-                Log.d("SI", "ENTRO");
                 ImageView imageView= findViewById(R.id.imageView13);
                 imageView.setImageResource(R.drawable.followers);
                 TextView t= findViewById(R.id.textView16);
@@ -88,7 +84,6 @@ public class PerfilUsuario extends AppCompatActivity {
     public void pushFollow(View v)  {
         ImageView imageView= findViewById(R.id.imageView13);
         if(seguido==0){
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/persona/seguir/"+MainActivity.personas.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();
@@ -107,7 +102,6 @@ public class PerfilUsuario extends AppCompatActivity {
             }
         }
         else{
-            //sitio/add/TYPE=type/id_site/KEY=token
             String token= sharedPreferences.getString("token","");
             String url="https://findoor.herokuapp.com/persona/delete/"+MainActivity.personas.get(value).getId()+"/KEY="+token+"/";
             JsonTask jsonTask= new JsonTask();

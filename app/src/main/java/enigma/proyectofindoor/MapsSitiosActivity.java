@@ -121,8 +121,6 @@ public class MapsSitiosActivity extends FragmentActivity implements OnMapReadyCa
     /** Called when the user clicks a marker. */
     public boolean onMarkerClick(final Marker marker) {
         int i= Integer.parseInt(marker.getTag()+"");
-        Log.d("PRESIONÓ", MainActivity.sitios.get(i).getNombre());
-
         return false;
     }
 
@@ -167,7 +165,6 @@ public class MapsSitiosActivity extends FragmentActivity implements OnMapReadyCa
     @Override
     public void onInfoWindowClick(Marker marker) {
         int i= Integer.parseInt(marker.getTag()+"");
-        Log.d("PRESIONÓ INFO", MainActivity.sitios.get(i).getNombre());
         Intent intent= new Intent(MapsSitiosActivity.this, InformacionActivity.class);
         intent.putExtra("valor", i);
         startActivity(intent);

@@ -26,7 +26,6 @@ public class ImageTask extends AsyncTask<String, Void, Bitmap> {
             httpURLConnection.connect();
             InputStream inputStream= httpURLConnection.getInputStream();
             Bitmap bitmap= BitmapFactory.decodeStream(inputStream);
-            Log.d("funca",inputStream.toString());
             return bitmap;
         } catch (MalformedURLException e) {
             e.printStackTrace();

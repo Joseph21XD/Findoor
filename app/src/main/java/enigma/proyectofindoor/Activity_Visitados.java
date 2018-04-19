@@ -39,9 +39,6 @@ public class Activity_Visitados extends AppCompatActivity {
         sharedPreferences = this.getSharedPreferences("enigma.proyectofindoor", getApplicationContext().MODE_PRIVATE);
         Intent intent = getIntent();
         tokenKey = sharedPreferences.getString("token", "");
-        /*
-        tokenKey = intent.getStringExtra("token");
-        Log.d("TOKEN", tokenKey+"");*/
         listView = findViewById(R.id.listaVisitados);
 
         String resultado = obtainJsonVisitados();
@@ -65,7 +62,6 @@ public class Activity_Visitados extends AppCompatActivity {
     public String obtainJsonVisitados() {
         String result = "";
         JsonTask jsonTask = new JsonTask();
-        Log.d("ENTRA A", "ObtainJsonVisitados");
         try {
             result = jsonTask.execute("http://findoor.herokuapp.com/sitio/TYPE=VISITED/"+ MainActivity.persona.getId() +"/KEY=" + tokenKey + "/").get();
         } catch (InterruptedException e) {
@@ -79,14 +75,12 @@ public class Activity_Visitados extends AppCompatActivity {
     }
 
     public String formatJsonNewKey(String resul) {
-        Log.d("ENTRA A", "formatJsonNewKey");
         try {
 
             JSONObject jsonObject = new JSONObject(resul);
 
             String key = jsonObject.getString("token");
             sharedPreferences.edit().putString("token", key).apply();
-            Log.i("jsonObject KEY FINAL", key);
             return key;
 
         } catch (JSONException e) {
@@ -136,7 +130,6 @@ public class Activity_Visitados extends AppCompatActivity {
                 JSONObject jsonSitio = new JSONObject(jsonArray.getString(i));
                 temp.add(DataParserJ.deparsear(jsonSitio.getString("imagen")));
             }
-            Log.i("jsonObject AQUI IMAGEN", temp.toString());
             return temp;
 
         } catch (JSONException e) {
