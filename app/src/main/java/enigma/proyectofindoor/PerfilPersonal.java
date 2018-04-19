@@ -71,7 +71,8 @@ public class PerfilPersonal extends AppCompatActivity {
     {
         sharedPreferences.edit().putString("token","").apply();
         LoginManager.getInstance().logOut();
-        finish();
+        Intent intent = new Intent(PerfilPersonal.this, MainActivity.class);
+        startActivity(intent);
     }
 
     public void seguidosClicked(View view) throws ExecutionException, InterruptedException {

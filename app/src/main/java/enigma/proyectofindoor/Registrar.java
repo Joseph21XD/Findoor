@@ -191,7 +191,7 @@ public class Registrar extends AppCompatActivity {
                 }
                 break;
         }
-        callbackManager.onActivityResult(requestCode,resultCode,imageReturnedIntent);
+
 
     }
 

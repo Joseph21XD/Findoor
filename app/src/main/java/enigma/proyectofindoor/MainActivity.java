@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
             Profile profile= Profile.getCurrentProfile();
             isfacebook=true;
             try {
+                Log.d("URL", profile.getProfilePictureUri(100,100).toString());
+                Log.d("NAME", profile.getName());
                 logFacebook(profile.getId(),profile.getFirstName(),profile.getLastName(),profile.getProfilePictureUri(100,100).toString());
             } catch (ExecutionException e) {
                 e.printStackTrace();
